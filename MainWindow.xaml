@@ -11,8 +11,36 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="Robocopy GUI" Height="450" Width="800">
+        Title="Robocopy GUI" Height="600" Width="1020">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <GroupBox Header="File" Height="96" VerticalAlignment="Top" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="InputFilePath" Margin="10,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top"/>
+                <Button x:Name="ButtonPickFile" Content="Search..." VerticalAlignment="Center" Grid.Column="1" Width="100" HorizontalAlignment="Center" Click="ButtonPickFile_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="GroupOperations" Header="Operations" Grid.Row="1">
+            <ScrollViewer>
+                <Grid x:Name="GridOperations">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </ScrollViewer>
+        </GroupBox>
     </Grid>
 </Window>
