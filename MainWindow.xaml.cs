@@ -26,10 +26,20 @@ namespace robocopy_gui
     {
         private List<Operation> operations = new List<Operation>();
         private List<string> registeredNames = new List<string>();
+        private string currentFile = "";
 
         public MainWindow()
         {
             InitializeComponent();
+            MainWindow1.Width = Properties.Settings.Default.MainWindowWidth;
+            MainWindow1.Height = Properties.Settings.Default.MainWindowHeight;
+            string lastFile = Properties.Settings.Default.LastFile;
+            if( !string.IsNullOrWhiteSpace(lastFile) )
+            {
+                InputFilePath.Text = lastFile;
+                currentFile = lastFile;
+                readFile();
+            }
         }
 
         private void ButtonPickFile_Click(object sender, RoutedEventArgs e)
@@ -43,34 +53,8 @@ namespace robocopy_gui
                 string fileName = openFileDialog.FileName;
                 if (File.Exists(fileName))
                 {
-                    operations.Clear();
-
-                    //read lines in file
-                    InputFilePath.Text = fileName;
-                    List<string> operationStrings = new List<string>();
-                    using (StreamReader reader = File.OpenText(fileName))
-                    {
-                        while (!reader.EndOfStream)
-                        {
-                            var readLine = reader.ReadLine();
-                            //only read lines that are actually robocopy
-                            if (readLine != null && readLine.StartsWith("robocopy")) 
-                            {
-                                operationStrings.Add(readLine);
-                            }                            
-                        }
-                        reader.Close();
-                    }
-
-                    //interpret all read lines as operations
-                    foreach (string operation in operationStrings)
-                    {
-                        operations.Add(new Operation(operation));
-                    }
-
-                    //display rows of operations
-                    renderList();
-                    GroupOperations.Visibility = Visibility.Visible;
+                    currentFile = fileName;
+                    readFile();
                 } else
                 {
                     File.CreateText(fileName).Dispose();
@@ -80,6 +64,37 @@ namespace robocopy_gui
             }
         }
 
+        private void readFile()
+        {
+            operations.Clear();
+
+            //read lines in file
+            InputFilePath.Text = currentFile;
+            List<string> operationStrings = new List<string>();
+            using (StreamReader reader = File.OpenText(currentFile))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var readLine = reader.ReadLine();
+                    //only read lines that are actually robocopy
+                    if (readLine != null && readLine.StartsWith("robocopy"))
+                    {
+                        operationStrings.Add(readLine);
+                    }
+                }
+                reader.Close();
+            }
+
+            //interpret all read lines as operations
+            foreach (string operation in operationStrings)
+            {
+                operations.Add(new Operation(operation));
+            }
+
+            //display rows of operations
+            renderList();
+            GroupOperations.Visibility = Visibility.Visible;
+        }
         private void renderList()
         {
             GridOperations.RowDefinitions.Clear();
@@ -240,6 +255,14 @@ namespace robocopy_gui
 
                 operationIndex++;
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.MainWindowWidth = MainWindow1.Width;
+            Properties.Settings.Default.MainWindowHeight = MainWindow1.Height;
+            Properties.Settings.Default.LastFile = currentFile;
+            Properties.Settings.Default.Save();
         }
     }
 }
