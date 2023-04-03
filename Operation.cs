@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace robocopy_gui
 {
@@ -25,9 +21,7 @@ namespace robocopy_gui
         {
             SourceFolder = source;
             DestinationFolder = destination;
-            Name = source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
-                + " -> "
-                + destination.Substring(0, 2) + " " + destination.Split("\\")[destination.Split("\\").Length - 1];
+            Name = CreateName(source, destination);
             mirror = mirrorFlag;
             ExcludeFiles = new List<string>();
             ExcludeFolders = new List<string>();
@@ -179,6 +173,33 @@ namespace robocopy_gui
             }
             command += " /mt:" + MultiThreadCount + " /R:" + RetryCount;
             return command;
+        }
+
+        public string CreateName()
+        {
+            if (string.IsNullOrWhiteSpace(SourceFolder) || string.IsNullOrWhiteSpace(DestinationFolder))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return SourceFolder.Substring(0, 2) + " " + SourceFolder.Split("\\")[SourceFolder.Split("\\").Length - 1]
+                + " -> "
+                + DestinationFolder.Substring(0, 2) + " " + DestinationFolder.Split("\\")[DestinationFolder.Split("\\").Length - 1];
+            }
+        }
+        public string CreateName(string source, string destination)
+        {
+            if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(destination))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
+                + " -> "
+                + destination.Substring(0, 2) + " " + destination.Split("\\")[destination.Split("\\").Length - 1];
+            }
         }
     }
 }

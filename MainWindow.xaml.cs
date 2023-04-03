@@ -3,18 +3,8 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Path = System.IO.Path;
 
 namespace robocopy_gui
@@ -36,9 +26,12 @@ namespace robocopy_gui
             string lastFile = Properties.Settings.Default.LastFile;
             if( !string.IsNullOrWhiteSpace(lastFile) )
             {
-                InputFilePath.Text = lastFile;
-                currentFile = lastFile;
-                readFile();
+                if(File.Exists(lastFile))
+                {
+                    InputFilePath.Text = lastFile;
+                    currentFile = lastFile;
+                    readFile();
+                }
             }
         }
 
@@ -51,16 +44,92 @@ namespace robocopy_gui
             if (openFileDialog.ShowDialog() == true)
             {
                 string fileName = openFileDialog.FileName;
+                currentFile = fileName;
+                InputFilePath.Text = currentFile;
                 if (File.Exists(fileName))
                 {
-                    currentFile = fileName;
                     readFile();
                 } else
                 {
                     File.CreateText(fileName).Dispose();
-
                     //show operations group with empty list to allow adding of new operations
-                }            
+                    clearOperationsList();
+                    renderList();
+                }
+                ButtonCommit.IsEnabled = true;
+            }
+        }
+
+        private void InputFilePath_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(currentFile != InputFilePath.Text)
+            {
+                string fileName = InputFilePath.Text;
+                if (File.Exists(fileName))
+                {
+                    currentFile = fileName;
+                    readFile();
+                    ButtonCommit.IsEnabled = true;
+                }
+                else
+                {
+                    if (MessageBox.Show(
+                            "The file / path you've entered does not exist.\nDo you want to create it?",
+                            "File doesn't exist",
+                            MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        File.CreateText(fileName).Dispose();
+                        currentFile = fileName;
+                        //show operations group with empty list to allow adding of new operations
+                        clearOperationsList();
+                        renderList();
+                        ButtonCommit.IsEnabled = true;
+                    }
+                    else
+                    {
+                        InputFilePath.Text = currentFile;
+                    }
+                }
+            }
+        }
+        private void InputFilePath_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                InputFilePath_LostFocus (sender, e );
+            }
+        }
+
+        private void OperationTextBoxSource_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox s = sender as TextBox ?? throw new Exception("Sender is null");
+            int index = Convert.ToInt32(s.Tag);
+            operations[index].SourceFolder = s.Text;
+            operations[index].Name = operations[index].CreateName();
+        }
+        private void OperationTextBoxDest_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox s = sender as TextBox ?? throw new Exception("Sender is null");
+            int index = Convert.ToInt32(s.Tag);
+            operations[index].DestinationFolder = s.Text;
+            operations[index].Name = operations[index].CreateName();
+        }
+
+        private void clearOperationsList()
+        {
+            operations = new List<Operation>();
+            foreach (string item in registeredNames)
+            {
+                GridOperations.UnregisterName(item);
+            }
+            registeredNames.Clear();
+            foreach (UIElement control in GridOperations.Children)
+            {
+                if(control is TextBox)
+                {
+                    control.LostFocus -= OperationTextBoxSource_LostFocus;
+                    control.LostFocus -= OperationTextBoxDest_LostFocus;
+                }
             }
         }
 
@@ -69,7 +138,6 @@ namespace robocopy_gui
             operations.Clear();
 
             //read lines in file
-            InputFilePath.Text = currentFile;
             List<string> operationStrings = new List<string>();
             using (StreamReader reader = File.OpenText(currentFile))
             {
@@ -93,7 +161,6 @@ namespace robocopy_gui
 
             //display rows of operations
             renderList();
-            GroupOperations.Visibility = Visibility.Visible;
         }
         private void renderList()
         {
@@ -119,16 +186,17 @@ namespace robocopy_gui
                 searchSource.VerticalAlignment = VerticalAlignment.Center;
                 searchSource.Width = 100;
                 searchSource.Tag = operationIndex;
-                searchSource.Click += (s, e) =>
+                searchSource.Click += (sender, e) =>
                 {
-                    Button sender = s as Button ?? throw new Exception("Sender is null");
-                    int index = Convert.ToInt32(sender.Tag);
+                    Button s = sender as Button ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
                     CommonOpenFileDialog dialog = new CommonOpenFileDialog();
                     dialog.InitialDirectory = Path.GetDirectoryName(operations[index].SourceFolder);
                     dialog.IsFolderPicker = true;
                     if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                     {
                         operations[index].SourceFolder = dialog.FileName;
+                        operations[index].Name = operations[index].CreateName();
                         TextBox source = GridOperations.FindName("source" + index) as TextBox ?? throw new Exception("Couldn't find appropriate TextBox");
                         source.Text = dialog.FileName;
                     }
@@ -142,6 +210,8 @@ namespace robocopy_gui
                 source.VerticalAlignment = VerticalAlignment.Top;
                 source.Margin = new Thickness(10, 10, 0, 0);
                 source.TextWrapping = TextWrapping.NoWrap;
+                source.Tag = operationIndex;
+                source.LostFocus += OperationTextBoxSource_LostFocus;
                 Grid.SetColumn(source, 1);
                 Grid.SetRow(source, operationIndex);
 
@@ -151,16 +221,17 @@ namespace robocopy_gui
                 searchDest.VerticalAlignment = VerticalAlignment.Center;
                 searchDest.Width = 100;
                 searchDest.Tag = operationIndex;
-                searchDest.Click += (s, e) =>
+                searchDest.Click += (sender, e) =>
                 {
-                    Button sender = s as Button ?? throw new Exception("Sender is null");
-                    int index = Convert.ToInt32(sender.Tag);
+                    Button s = sender as Button ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
                     CommonOpenFileDialog dialog = new CommonOpenFileDialog();
                     dialog.InitialDirectory = Path.GetDirectoryName(operations[index].DestinationFolder);
                     dialog.IsFolderPicker = true;
                     if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                     {
                         operations[index].DestinationFolder = dialog.FileName;
+                        operations[index].Name = operations[index].CreateName();
                         TextBox dest = GridOperations.FindName("dest" + index) as TextBox ?? throw new Exception("Couldn't find appropriate TextBox");
                         dest.Text = dialog.FileName;
                     }
@@ -174,6 +245,8 @@ namespace robocopy_gui
                 dest.VerticalAlignment = VerticalAlignment.Top;
                 dest.Margin = new Thickness(10, 10, 0, 0);
                 dest.TextWrapping = TextWrapping.NoWrap;
+                dest.Tag = operationIndex;
+                dest.LostFocus += OperationTextBoxDest_LostFocus;
                 Grid.SetColumn(dest, 3);
                 Grid.SetRow(dest, operationIndex);
 
@@ -231,10 +304,12 @@ namespace robocopy_gui
                 remove.Tag = operationIndex;
                 remove.Click += (s, e) =>
                 {
+
                     Button sender = s as Button ?? throw new Exception("Sender is null");
                     int index = Convert.ToInt32(sender.Tag);
-                    operations.RemoveAt(index);
-                    renderList();
+                    MessageBox.Show(operations[index].Name);
+                    /*operations.RemoveAt(index);
+                    renderList();*/
                 };
                 Grid.SetColumn(remove, 6);
                 Grid.SetRow(remove, operationIndex);
@@ -255,6 +330,26 @@ namespace robocopy_gui
 
                 operationIndex++;
             }
+
+            RowDefinition addRow = new RowDefinition();
+            addRow.Height = new GridLength(42);
+            GridOperations.RowDefinitions.Add(addRow);
+
+            Button add = new Button();
+            add.Content = "+";
+            add.HorizontalAlignment = HorizontalAlignment.Center;
+            add.VerticalAlignment = VerticalAlignment.Center;
+            add.Width = 60;
+            add.Click += (s, e) =>
+            {
+                operations.Add(new Operation(string.Empty, string.Empty));
+                renderList();
+            };
+            Grid.SetColumn(add, 6);
+            Grid.SetRow(add, operationIndex);
+
+            GridOperations.Children.Add(add);
+            GroupOperations.Visibility = Visibility.Visible;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -16,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="48" />
         </Grid.RowDefinitions>
         <GroupBox Header="File" Height="96" VerticalAlignment="Top" Grid.Row="0">
             <Grid>
@@ -23,7 +24,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="InputFilePath" Margin="10,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top"/>
+                <TextBox x:Name="InputFilePath" Margin="10,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" LostFocus="InputFilePath_LostFocus" KeyDown="InputFilePath_KeyDown"/>
                 <Button x:Name="ButtonPickFile" Content="Search..." VerticalAlignment="Center" Grid.Column="1" Width="100" HorizontalAlignment="Center" Click="ButtonPickFile_Click"/>
             </Grid>
         </GroupBox>
@@ -42,5 +43,6 @@
                 </Grid>
             </ScrollViewer>
         </GroupBox>
+        <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Row="2" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" />
     </Grid>
 </Window>
