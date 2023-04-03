@@ -4,14 +4,19 @@ namespace robocopy_gui
 {
     internal class Operation
     {
-        public string Name {  get; set; }
+        public bool enabled { get; set; } = true;
+        public string Name { get; set; }
         public string SourceFolder { get; set; }
         public string DestinationFolder { get; set; }
-        public bool mirror { get; set; } //true -> delete extra files not present in source | false -> keep extra files
+        public bool mirror { get; set; } //true -> delete extra files not present in source | false -> keep extra files (/e /xx)
+        //mirror and move are mutually exclusive
+        public bool move { get; set; } = false; //true -> move files instead of copying, needs /e /xx
+        public bool onlyIfNewer { get; set; } = false; //ignore if target file is newer
+        public bool useFATTime { get; set; } = false; //useful when copying between two file systems, 2s precision
         public List<string> ExcludeFiles { get; set; }
         public List<string> ExcludeFolders { get; set; }
         public int MultiThreadCount { get; set; } = 3;
-        public int RetryCount { get; set; } = 1;
+        public int RetryCount { get; set; } = 0;
 
         public Operation(
             string source, 
@@ -73,8 +78,16 @@ namespace robocopy_gui
         public Operation(string command)
         {
             string[] parts = command.Split(" ");
-            int i = 1;
-            if (parts[i].EndsWith("\""))
+            int i;
+            if (parts[0].ToLower() == "rem")    //detect commented lines ("REM ...")
+            {
+                enabled = false;
+                i = 2;
+            } else
+            {
+                i = 1;
+            }
+            if (parts[i].EndsWith("\""))    //get source folder (including checking for spaces in path)
             {
                 SourceFolder = parts[i];
             } else
@@ -87,7 +100,7 @@ namespace robocopy_gui
                 SourceFolder += parts[i];
             }
             i++;
-            if (parts[i].EndsWith("\""))
+            if (parts[i].EndsWith("\""))    //get destination folder (including checking for spaces in path)
             {
                 DestinationFolder = parts[i];
             }
@@ -107,10 +120,21 @@ namespace robocopy_gui
             mirror = false;
             ExcludeFiles = new List<string>();
             ExcludeFolders = new List<string>();
-            while ( i < parts.Length )
+            while ( i < parts.Length)      //check for flags
             {
-                if (parts[i] == "/mir") { mirror = true; }
-                if (parts[i] == "/xf")
+                if (parts[i].ToLower() == "/mir") { mirror = true; }
+                if (parts[i].ToLower() == "/mov") { move = true; }
+                if (parts[i].ToLower() == "/xo") { onlyIfNewer = true; }
+                if (parts[i].ToLower() == "/fft") { useFATTime = true; }
+                if (parts[i].ToLower().StartsWith("/mt"))
+                {
+                    MultiThreadCount = int.Parse(parts[i].Split(":")[1]);
+                }
+                if (parts[i].ToLower().StartsWith("/r"))
+                {
+                    RetryCount = int.Parse(parts[i].Split(":")[1].ToLower());
+                }
+                if (parts[i].ToLower() == "/xf")    //get excluded file patterns
                 {
                     i++;
                     while(!parts[i].StartsWith("/"))
@@ -120,7 +144,7 @@ namespace robocopy_gui
                         if (i > parts.Length - 1) { break; }
                     }
                 }
-                if (parts[i] == "/xd")
+                if (parts[i].ToLower() == "/xd")    //get excluded folder patterns
                 {
                     i++;
                     while (!parts[i].StartsWith("/"))
@@ -130,32 +154,44 @@ namespace robocopy_gui
                         if(i > parts.Length - 1) { break; }
                     }
                 }
-                if (i > parts.Length - 1) { break; }
-                if (parts[i].StartsWith("/mt") || parts[i].StartsWith("/MT")) 
-                { 
-                    MultiThreadCount = int.Parse( parts[i].Split(":")[1] );
-                }
-                if (parts[i].StartsWith("/r") || parts[i].StartsWith("/R"))
-                {
-                    RetryCount = int.Parse(parts[i].Split(":")[1]);
-                }
                 i++;
             }
-            Name = SourceFolder.Substring(0, 2) + " " + SourceFolder.Split("\\")[SourceFolder.Split("\\").Length - 1]
-                + " -> "
-                + DestinationFolder.Substring(0, 2) + " " + DestinationFolder.Split("\\")[DestinationFolder.Split("\\").Length - 1];
+            Name = CreateName();
         }
 
         public string Command()
         {
-            string command = "robocopy";
+            string command = "";
+            if (enabled)
+            {
+                command += "robocopy";
+            } else
+            {
+                command += "REM robocopy";
+            }
             command += " \"" + SourceFolder + "\"";
             command += " \"" + DestinationFolder + "\"";
-            if( mirror )
+            if( mirror && !move )
             {
                 command += " /mir";
+            } else
+            {
+                command += " /e /xx";
             }
-            if(ExcludeFiles.Count > 0) 
+            if(move)
+            {
+                command += " /mov";
+            }
+            if(onlyIfNewer)
+            {
+                command += " /xo";
+            }
+            if(useFATTime)
+            {
+                command += " /fft";
+            }
+            command += " /mt:" + MultiThreadCount + " /R:" + RetryCount;
+            if (ExcludeFiles.Count > 0) 
             {
                 command += " /xf";
                 foreach (string item in ExcludeFiles)
@@ -171,7 +207,6 @@ namespace robocopy_gui
                     command += " " + item;
                 }
             }
-            command += " /mt:" + MultiThreadCount + " /R:" + RetryCount;
             return command;
         }
 

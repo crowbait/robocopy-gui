@@ -2,6 +2,7 @@
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,7 @@ namespace robocopy_gui
                 {
                     InputFilePath.Text = lastFile;
                     currentFile = lastFile;
+                    ButtonCommit.IsEnabled = true;
                     readFile();
                 }
             }
@@ -99,7 +101,6 @@ namespace robocopy_gui
                 InputFilePath_LostFocus (sender, e );
             }
         }
-
         private void InputFile_Drop(object sender, DragEventArgs e)
         {
             string fileName = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
@@ -126,7 +127,6 @@ namespace robocopy_gui
             operations[index].DestinationFolder = s.Text;
             operations[index].Name = operations[index].CreateName();
         }
-
         private void clearOperationsList()
         {
             operations = new List<Operation>();
@@ -157,7 +157,10 @@ namespace robocopy_gui
                 {
                     var readLine = reader.ReadLine();
                     //only read lines that are actually robocopy
-                    if (readLine != null && readLine.StartsWith("robocopy"))
+                    if (readLine != null && (
+                        readLine.ToLower().StartsWith("robocopy") ||
+                        readLine.ToLower().StartsWith("rem robocopy")
+                        ))
                     {
                         operationStrings.Add(readLine);
                     }
@@ -192,6 +195,27 @@ namespace robocopy_gui
                 newRow.Height = new GridLength(42);
                 GridOperations.RowDefinitions.Add(newRow);
 
+                CheckBox enabled = new CheckBox();
+                enabled.Content = "Enabled";
+                enabled.IsChecked = operation.enabled;
+                enabled.HorizontalAlignment = HorizontalAlignment.Center;
+                enabled.VerticalAlignment = VerticalAlignment.Center;
+                enabled.Tag = operationIndex;
+                enabled.Checked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].enabled = true;
+                };
+                enabled.Unchecked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].enabled = false;
+                };
+                Grid.SetColumn(enabled, 0);
+                Grid.SetRow(enabled, operationIndex);
+
                 Button searchSource = new Button();
                 searchSource.Content = "Search...";
                 searchSource.HorizontalAlignment = HorizontalAlignment.Center;
@@ -213,7 +237,7 @@ namespace robocopy_gui
                         source.Text = dialog.FileName;
                     }
                 };
-                Grid.SetColumn(searchSource, 0);
+                Grid.SetColumn(searchSource, 1);
                 Grid.SetRow(searchSource, operationIndex);
 
                 TextBox source = new TextBox();
@@ -224,7 +248,7 @@ namespace robocopy_gui
                 source.TextWrapping = TextWrapping.NoWrap;
                 source.Tag = operationIndex;
                 source.LostFocus += OperationTextBoxSource_LostFocus;
-                Grid.SetColumn(source, 1);
+                Grid.SetColumn(source, 2);
                 Grid.SetRow(source, operationIndex);
 
                 Button searchDest = new Button();
@@ -248,7 +272,7 @@ namespace robocopy_gui
                         dest.Text = dialog.FileName;
                     }
                 };
-                Grid.SetColumn(searchDest, 2);
+                Grid.SetColumn(searchDest, 3);
                 Grid.SetRow(searchDest, operationIndex);
 
                 TextBox dest = new TextBox();
@@ -259,11 +283,11 @@ namespace robocopy_gui
                 dest.TextWrapping = TextWrapping.NoWrap;
                 dest.Tag = operationIndex;
                 dest.LostFocus += OperationTextBoxDest_LostFocus;
-                Grid.SetColumn(dest, 3);
+                Grid.SetColumn(dest, 4);
                 Grid.SetRow(dest, operationIndex);
 
                 Button exclFiles = new Button();
-                exclFiles.Content = "Exclude\nFiles...";
+                exclFiles.Content = "Exclude\nFiles: " + operation.ExcludeFiles.Count;
                 exclFiles.FontSize = 10;
                 exclFiles.HorizontalAlignment = HorizontalAlignment.Center;
                 exclFiles.VerticalAlignment = VerticalAlignment.Center;
@@ -280,13 +304,14 @@ namespace robocopy_gui
                     if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
                     {
                         operations[index].ExcludeFiles = dialog.returnExclusions;
+                        sender.Content = "Exclude\nFiles: " + dialog.returnExclusions.Count;
                     }
                 };
-                Grid.SetColumn(exclFiles, 4);
+                Grid.SetColumn(exclFiles, 5);
                 Grid.SetRow(exclFiles, operationIndex);
 
                 Button exclFolders = new Button();
-                exclFolders.Content = "Exclude\nFolders...";
+                exclFolders.Content = "Exclude\nFolders: " + operation.ExcludeFolders.Count;
                 exclFolders.FontSize = 10;
                 exclFolders.HorizontalAlignment = HorizontalAlignment.Center;
                 exclFolders.VerticalAlignment = VerticalAlignment.Center;
@@ -303,10 +328,108 @@ namespace robocopy_gui
                     if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
                     {
                         operations[index].ExcludeFolders = dialog.returnExclusions;
+                        sender.Content = "Exclude\nFolders: " + dialog.returnExclusions.Count;
                     }
                 };
-                Grid.SetColumn(exclFolders, 5);
+                Grid.SetColumn(exclFolders, 6);
                 Grid.SetRow(exclFolders, operationIndex);
+
+                CheckBox mirror = new CheckBox();
+                mirror.Name = "mirror" + operationIndex;
+                mirror.Content = "Mirror";
+                mirror.IsChecked = operation.mirror;
+                mirror.ToolTip = "Copy files to destination folder, removing files from the destination that are not present in the source folder.";
+                mirror.HorizontalAlignment = HorizontalAlignment.Center;
+                mirror.VerticalAlignment = VerticalAlignment.Center;
+                mirror.Tag = operationIndex;
+                mirror.Checked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].mirror = true;
+                    CheckBox move = GridOperations.FindName("move" + index) as CheckBox ?? throw new Exception("Couldn't find appropriate CheckBox");
+                    move.IsChecked = false;
+                };
+                mirror.Unchecked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].mirror = false;
+                };
+                Grid.SetColumn(mirror, 7);
+                Grid.SetRow(mirror, operationIndex);
+
+                CheckBox move = new CheckBox();
+                move.Name = "move" + operationIndex;
+                move.Content = "Move";
+                move.IsChecked = operation.move;
+                move.ToolTip = "Move files to the destination folder rather than copying them, removing them from the source folder.";
+                move.HorizontalAlignment = HorizontalAlignment.Center;
+                move.VerticalAlignment = VerticalAlignment.Center;
+                move.Tag = operationIndex;
+                move.Checked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].move = true;
+                    CheckBox mirror = GridOperations.FindName("mirror" + index) as CheckBox ?? throw new Exception("Couldn't find appropriate CheckBox");
+                    mirror.IsChecked = false;
+                };
+                move.Unchecked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].move = false;
+                };
+                Grid.SetColumn(move, 8);
+                Grid.SetRow(move, operationIndex);
+
+                CheckBox onlyNewer = new CheckBox();
+                onlyNewer.Content = "Only newer";
+                onlyNewer.IsChecked = operation.onlyIfNewer;
+                onlyNewer.ToolTip = "Copy or move files to the destination folder only if the source file is newer than the target file.";
+                onlyNewer.HorizontalAlignment = HorizontalAlignment.Center;
+                onlyNewer.VerticalAlignment = VerticalAlignment.Center;
+                onlyNewer.Tag = operationIndex;
+                onlyNewer.Checked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].onlyIfNewer = true;
+                    CheckBox fatFileTime = GridOperations.FindName("FATtime" + index) as CheckBox ?? throw new Exception("Couldn't find appropriate CheckBox");
+                    fatFileTime.IsChecked = true;
+                };
+                onlyNewer.Unchecked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].onlyIfNewer = false;
+                };
+                Grid.SetColumn(onlyNewer, 9);
+                Grid.SetRow(onlyNewer, operationIndex);
+
+                CheckBox fatFileTime = new CheckBox();
+                fatFileTime.Name = "FATtime" + operationIndex;
+                fatFileTime.Content = "FAT-Time";
+                fatFileTime.IsChecked = operation.onlyIfNewer;
+                fatFileTime.ToolTip = "Use FAT-style time format when writing file. Useful when copying to another file system and when using \"only newer files\".";
+                fatFileTime.HorizontalAlignment = HorizontalAlignment.Center;
+                fatFileTime.VerticalAlignment = VerticalAlignment.Center;
+                fatFileTime.Tag = operationIndex;
+                fatFileTime.Checked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].useFATTime = true;
+                };
+                fatFileTime.Unchecked += (sender, e) =>
+                {
+                    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+                    int index = Convert.ToInt32(s.Tag);
+                    operations[index].useFATTime = false;
+                };
+                Grid.SetColumn(fatFileTime, 10);
+                Grid.SetRow(fatFileTime, operationIndex);
 
                 Button remove = new Button();
                 remove.Content = "-";
@@ -319,26 +442,36 @@ namespace robocopy_gui
 
                     Button sender = s as Button ?? throw new Exception("Sender is null");
                     int index = Convert.ToInt32(sender.Tag);
-                    MessageBox.Show(operations[index].Name);
-                    /*operations.RemoveAt(index);
-                    renderList();*/
+                    operations.RemoveAt(index);
+                    renderList();
                 };
-                Grid.SetColumn(remove, 6);
+                Grid.SetColumn(remove, 11);
                 Grid.SetRow(remove, operationIndex);
 
+                GridOperations.Children.Add(enabled);
                 GridOperations.Children.Add(searchSource);
                 GridOperations.Children.Add(source);
                 GridOperations.Children.Add(searchDest);
                 GridOperations.Children.Add(dest);
                 GridOperations.Children.Add(exclFiles);
                 GridOperations.Children.Add(exclFolders);
+                GridOperations.Children.Add(mirror);
+                GridOperations.Children.Add(move);
+                GridOperations.Children.Add(onlyNewer);
+                GridOperations.Children.Add(fatFileTime);
                 GridOperations.Children.Add(remove);
 
 
                 GridOperations.RegisterName(source.Name, source);
                 GridOperations.RegisterName(dest.Name, dest);
+                GridOperations.RegisterName(mirror.Name, mirror);
+                GridOperations.RegisterName(move.Name, move);
+                GridOperations.RegisterName(fatFileTime.Name, fatFileTime);
                 registeredNames.Add(source.Name);
                 registeredNames.Add(dest.Name);
+                registeredNames.Add(mirror.Name);
+                registeredNames.Add(move.Name);
+                registeredNames.Add(fatFileTime.Name);
 
                 operationIndex++;
             }
@@ -357,7 +490,7 @@ namespace robocopy_gui
                 operations.Add(new Operation(string.Empty, string.Empty));
                 renderList();
             };
-            Grid.SetColumn(add, 6);
+            Grid.SetColumn(add, 11);
             Grid.SetRow(add, operationIndex);
 
             GridOperations.Children.Add(add);
@@ -370,6 +503,11 @@ namespace robocopy_gui
             Properties.Settings.Default.MainWindowHeight = MainWindow1.Height;
             Properties.Settings.Default.LastFile = currentFile;
             Properties.Settings.Default.Save();
+        }
+
+        private void ButtonCommit_Click(object sender, RoutedEventArgs e)
+        {
+            Trace.WriteLine("");
         }
     }
 }
