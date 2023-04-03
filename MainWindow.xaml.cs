@@ -18,6 +18,7 @@ namespace robocopy_gui
         private List<Operation> operations = new List<Operation>();
         private List<string> registeredNames = new List<string>();
         private string currentFile = "";
+        private string scriptTitle = "Backup";
 
         public MainWindow()
         {
@@ -507,7 +508,31 @@ namespace robocopy_gui
 
         private void ButtonCommit_Click(object sender, RoutedEventArgs e)
         {
-            Trace.WriteLine("");
+            StreamWriter file;
+            if (!File.Exists(currentFile))
+            {
+                file = File.CreateText(currentFile);
+            } else
+            {
+                file = new StreamWriter(currentFile);
+            }
+            file.WriteLine("echo off");
+            file.WriteLine("title " + scriptTitle);
+
+            foreach (Operation item in operations)
+            {
+                if( !string.IsNullOrWhiteSpace(item.SourceFolder) && !string.IsNullOrWhiteSpace(item.DestinationFolder) )
+                {
+                    file.WriteLine();
+                    if(!item.enabled)
+                    {
+                        file.Write("REM ");
+                    }
+                    file.WriteLine("echo " + item.Name);
+                    file.WriteLine(item.Command());
+                }
+            }
+            file.Close();
         }
     }
 }
