@@ -18,14 +18,14 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="48" />
         </Grid.RowDefinitions>
-        <GroupBox Header="File" Height="96" VerticalAlignment="Top" Grid.Row="0">
+        <GroupBox Header="File" Height="96" VerticalAlignment="Top" Grid.Row="0" AllowDrop="True" Drop="InputFile_Drop">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="120" />
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="InputFilePath" Margin="10,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" LostFocus="InputFilePath_LostFocus" KeyDown="InputFilePath_KeyDown"/>
-                <Button x:Name="ButtonPickFile" Content="Search..." VerticalAlignment="Center" Grid.Column="1" Width="100" HorizontalAlignment="Center" Click="ButtonPickFile_Click"/>
+                <TextBox x:Name="InputFilePath" Margin="10,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" LostFocus="InputFilePath_LostFocus" KeyDown="InputFilePath_KeyDown" AllowDrop="True" Drop="InputFile_Drop"/>
+                <Button x:Name="ButtonPickFile" Content="Search..." VerticalAlignment="Center" Grid.Column="1" Width="100" HorizontalAlignment="Center" Click="ButtonPickFile_Click" AllowDrop="True" Drop="InputFile_Drop"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GroupOperations" Header="Operations" Grid.Row="1" Visibility="Hidden">

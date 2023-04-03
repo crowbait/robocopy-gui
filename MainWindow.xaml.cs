@@ -100,6 +100,18 @@ namespace robocopy_gui
             }
         }
 
+        private void InputFile_Drop(object sender, DragEventArgs e)
+        {
+            string fileName = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            currentFile = fileName;
+            InputFilePath.Text = currentFile;
+            if (File.Exists(fileName))
+            {
+                readFile();
+                ButtonCommit.IsEnabled = true;
+            }
+        }
+
         private void OperationTextBoxSource_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox s = sender as TextBox ?? throw new Exception("Sender is null");
