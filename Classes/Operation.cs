@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 
 namespace robocopy_gui.Classes
 {
-  internal class Operation
+  public class Operation
   {
     public bool enabled { get; set; } = true;
+    public bool isArbitrary { get; set; } = false;
+    public string arbitraryCommand { get; set; } = string.Empty;
     public string Name { get; set; }
     public string SourceFolder { get; set; }
     public string DestinationFolder { get; set; }
@@ -162,57 +165,91 @@ namespace robocopy_gui.Classes
       Name = CreateName();
     }
 
+    public Operation(bool isArbitraryCommand, bool isEnabled, string command)
+    {
+      if (isArbitraryCommand)
+      {
+        isArbitrary = isArbitraryCommand;
+        enabled = isEnabled;
+        arbitraryCommand = command;
+        Name = string.Empty;
+        SourceFolder = string.Empty;
+        DestinationFolder = string.Empty;
+        ExcludeFiles = new List<string>();
+        ExcludeFolders = new List<string>();
+      }
+      else
+      {
+        // check to prevent accidental generation of wrongly-typed Operation objects
+        throw new ArgumentException("Arbitrary commands must be called with isArbitraryCommand = true");
+      }
+    }
+
     public string Command()
     {
-      string command = "";
-      if (enabled)
+      if (!isArbitrary)
       {
-        command += "robocopy";
-      }
-      else
-      {
-        command += "REM robocopy";
-      }
-      command += " \"" + SourceFolder + "\"";
-      command += " \"" + DestinationFolder + "\"";
-      if (mirror && !move)
-      {
-        command += " /mir";
-      }
-      else
-      {
-        command += " /e /xx";
-      }
-      if (move)
-      {
-        command += " /mov";
-      }
-      if (onlyIfNewer)
-      {
-        command += " /xo";
-      }
-      if (useFATTime)
-      {
-        command += " /fft";
-      }
-      command += " /mt:" + MultiThreadCount + " /R:" + RetryCount;
-      if (ExcludeFiles.Count > 0)
-      {
-        command += " /xf";
-        foreach (string item in ExcludeFiles)
+        string command = "";
+        if (enabled)
         {
-          command += " " + item;
+          command += "robocopy";
+        }
+        else
+        {
+          command += "REM robocopy";
+        }
+        command += " \"" + SourceFolder + "\"";
+        command += " \"" + DestinationFolder + "\"";
+        if (mirror && !move)
+        {
+          command += " /mir";
+        }
+        else
+        {
+          command += " /e /xx";
+        }
+        if (move)
+        {
+          command += " /mov";
+        }
+        if (onlyIfNewer)
+        {
+          command += " /xo";
+        }
+        if (useFATTime)
+        {
+          command += " /fft";
+        }
+        command += " /mt:" + MultiThreadCount + " /R:" + RetryCount;
+        if (ExcludeFiles.Count > 0)
+        {
+          command += " /xf";
+          foreach (string item in ExcludeFiles)
+          {
+            command += " " + item;
+          }
+        }
+        if (ExcludeFolders.Count > 0)
+        {
+          command += " /xd";
+          foreach (string item in ExcludeFolders)
+          {
+            command += " " + item;
+          }
+        }
+        return command;
+      }
+      else // is arbitrary command
+      {
+        if (enabled)
+        {
+          return arbitraryCommand;
+        }
+        else
+        {
+          return "REM " + arbitraryCommand;
         }
       }
-      if (ExcludeFolders.Count > 0)
-      {
-        command += " /xd";
-        foreach (string item in ExcludeFolders)
-        {
-          command += " " + item;
-        }
-      }
-      return command;
     }
 
     public string CreateName()
