@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using robocopy_gui.Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,10 +11,10 @@ using Path = System.IO.Path;
 
 namespace robocopy_gui
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+  /// <summary>
+  /// Interaction logic for MainWindow.xaml
+  /// </summary>
+  public partial class MainWindow : Window
     {
         private List<Operation> operations = new List<Operation>();
         private List<string> registeredNames = new List<string>();
