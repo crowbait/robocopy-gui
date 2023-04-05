@@ -5,10 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace robocopy_gui
 {
@@ -381,7 +379,24 @@ namespace robocopy_gui
           Button sender = s as Button ?? throw new Exception("Sender is null");
           int index = Convert.ToInt32(sender.Tag);
           OperationsList.RemoveAt(index);
-          renderList();
+          List<Control> toDelete = new List<Control>();
+          foreach (Control control in GridOperations.Children)
+          {
+            if((int)control.GetValue(Grid.RowProperty) == index)
+            {
+              toDelete.Add(control);
+            }
+            if ((int)control.GetValue(Grid.RowProperty) > index)
+            {
+              Grid.SetRow(control, (int)control.GetValue(Grid.RowProperty) - 1);
+              control.Tag = Convert.ToInt32(control.Tag) - 1;
+            }
+          }
+          foreach (UIElement control in toDelete)
+          {
+            GridOperations.Children.Remove(control);
+          }
+          GridOperations.RowDefinitions.RemoveAt(index);
         };
         Grid.SetColumn(remove, 11);
         Grid.SetRow(remove, operationIndex);
@@ -423,7 +438,7 @@ namespace robocopy_gui
 
     private void ButtonCommit_Click(object sender, RoutedEventArgs e)
     {
-      //MessageBox.Show("Inspect!");  // set breakpoint here for convenient variable inspection
+      MessageBox.Show("Inspect!");  // set breakpoint here for convenient variable inspection
       
       StreamWriter file;
       if (!File.Exists(currentFile))

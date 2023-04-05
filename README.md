@@ -5,6 +5,6 @@
 
 ### To-Do
 
-- custom commands inserted by line
-- change ui library to [ModernWPF](https://github.com/Kinnara/ModernWpf)
+- custom title for script
+- don't re-render entire list on operation add
 - add file to windows startup tasks
