@@ -6,6 +6,5 @@
 ### To-Do
 
 - custom commands inserted by line
-- write to file
 - change ui library to [ModernWPF](https://github.com/Kinnara/ModernWpf)
 - add file to windows startup tasks
