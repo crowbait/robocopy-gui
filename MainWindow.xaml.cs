@@ -278,6 +278,138 @@ namespace robocopy_gui
       //display rows of operations
       renderList();
     }
+    private void AddOperationRow (Operation operation, int operationIndex)
+    {
+      RowDefinition newRow = new RowDefinition();
+      newRow.Height = new GridLength(42);
+      GridOperations.RowDefinitions.Add(newRow);
+
+      if (!operation.isArbitrary)
+      {
+        UIOperationRobocopy row = new UIOperationRobocopy(operationIndex);
+        row.SearchSourceButton.Click += OperationButtonSearchSource_Click;
+        row.SearchDestButton.Click += OperationButtonSearchDest_Click;
+        row.SourceText.LostFocus += OperationTextBoxSource_LostFocus;
+        row.DestText.LostFocus += OperationTextBoxDest_LostFocus;
+        row.Mirror.Checked += OperationCheckMirror_enable;
+        row.Move.Checked += OperationCheckMove_enable;
+        row.OnlyNewer.Checked += OperationCheckOnlyNewer_enable;
+
+        Grid.SetColumn(row.SearchSourceButton, 1);
+        Grid.SetRow(row.SearchSourceButton, operationIndex);
+        Grid.SetColumn(row.SourceText, 2);
+        Grid.SetRow(row.SourceText, operationIndex);
+        Grid.SetColumn(row.SearchDestButton, 3);
+        Grid.SetRow(row.SearchDestButton, operationIndex);
+        Grid.SetColumn(row.DestText, 4);
+        Grid.SetRow(row.DestText, operationIndex);
+        Grid.SetColumn(row.ExclFilesButton, 5);
+        Grid.SetRow(row.ExclFilesButton, operationIndex);
+        Grid.SetColumn(row.ExclFoldersButton, 6);
+        Grid.SetRow(row.ExclFoldersButton, operationIndex);
+        Grid.SetColumn(row.Mirror, 7);
+        Grid.SetRow(row.Mirror, operationIndex);
+        Grid.SetColumn(row.Move, 8);
+        Grid.SetRow(row.Move, operationIndex);
+        Grid.SetColumn(row.OnlyNewer, 9);
+        Grid.SetRow(row.OnlyNewer, operationIndex);
+        Grid.SetColumn(row.FATFileTime, 10);
+        Grid.SetRow(row.FATFileTime, operationIndex);
+
+
+        GridOperations.Children.Add(row.SearchSourceButton);
+        GridOperations.Children.Add(row.SourceText);
+        GridOperations.Children.Add(row.SearchDestButton);
+        GridOperations.Children.Add(row.DestText);
+        GridOperations.Children.Add(row.ExclFilesButton);
+        GridOperations.Children.Add(row.ExclFoldersButton);
+        GridOperations.Children.Add(row.Mirror);
+        GridOperations.Children.Add(row.Move);
+        GridOperations.Children.Add(row.OnlyNewer);
+        GridOperations.Children.Add(row.FATFileTime);
+
+        GridOperations.RegisterName(row.SourceText.Name, row.SourceText);
+        GridOperations.RegisterName(row.DestText.Name, row.DestText);
+        GridOperations.RegisterName(row.Mirror.Name, row.Mirror);
+        GridOperations.RegisterName(row.Move.Name, row.Move);
+        GridOperations.RegisterName(row.FATFileTime.Name, row.FATFileTime);
+        registeredNames.Add(row.SourceText.Name);
+        registeredNames.Add(row.DestText.Name);
+        registeredNames.Add(row.Mirror.Name);
+        registeredNames.Add(row.Move.Name);
+        registeredNames.Add(row.FATFileTime.Name);
+      }
+      else
+      {
+        UIOperationArbitrary row = new UIOperationArbitrary(operationIndex);
+        row.Command.LostFocus += OperationTextBoxCommand_LostFocus;
+        Grid.SetColumn(row.label, 1);
+        Grid.SetRow(row.label, operationIndex);
+        Grid.SetColumn(row.Command, 2);
+        Grid.SetColumnSpan(row.Command, 9);
+        Grid.SetRow(row.Command, operationIndex);
+        GridOperations.Children.Add(row.label);
+        GridOperations.Children.Add(row.Command);
+      }
+
+      CheckBox enabled = new CheckBox();
+      enabled.Content = "Enabled";
+      enabled.IsChecked = operation.enabled;
+      enabled.HorizontalAlignment = HorizontalAlignment.Center;
+      enabled.VerticalAlignment = VerticalAlignment.Center;
+      enabled.Tag = operationIndex;
+      enabled.Checked += (sender, e) =>
+      {
+        CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+        int index = Convert.ToInt32(s.Tag);
+        OperationsList[index].enabled = true;
+      };
+      enabled.Unchecked += (sender, e) =>
+      {
+        CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
+        int index = Convert.ToInt32(s.Tag);
+        OperationsList[index].enabled = false;
+      };
+      Grid.SetColumn(enabled, 0);
+      Grid.SetRow(enabled, operationIndex);
+
+      Button remove = new Button();
+      remove.Content = "-";
+      remove.HorizontalAlignment = HorizontalAlignment.Center;
+      remove.VerticalAlignment = VerticalAlignment.Center;
+      remove.Width = 60;
+      remove.Tag = operationIndex;
+      remove.Click += (s, e) =>
+      {
+
+        Button sender = s as Button ?? throw new Exception("Sender is null");
+        int index = Convert.ToInt32(sender.Tag);
+        OperationsList.RemoveAt(index);
+        List<Control> toDelete = new List<Control>();
+        foreach (Control control in GridOperations.Children)
+        {
+          if ((int)control.GetValue(Grid.RowProperty) == index)
+          {
+            toDelete.Add(control);
+          }
+          if ((int)control.GetValue(Grid.RowProperty) > index)
+          {
+            Grid.SetRow(control, (int)control.GetValue(Grid.RowProperty) - 1);
+            control.Tag = Convert.ToInt32(control.Tag) - 1;
+          }
+        }
+        foreach (UIElement control in toDelete)
+        {
+          GridOperations.Children.Remove(control);
+        }
+        GridOperations.RowDefinitions.RemoveAt(index);
+      };
+      Grid.SetColumn(remove, 11);
+      Grid.SetRow(remove, operationIndex);
+
+      GridOperations.Children.Add(enabled);
+      GridOperations.Children.Add(remove);
+    }
     public void renderList()
     {
       GridOperations.RowDefinitions.Clear();
@@ -292,135 +424,7 @@ namespace robocopy_gui
       int operationIndex = 0;
       foreach (Operation operation in OperationsList)
       {
-        RowDefinition newRow = new RowDefinition();
-        newRow.Height = new GridLength(42);
-        GridOperations.RowDefinitions.Add(newRow);
-
-        if(!operation.isArbitrary)
-        {
-          UIOperationRobocopy row = new UIOperationRobocopy(operationIndex);
-          row.SearchSourceButton.Click += OperationButtonSearchSource_Click;
-          row.SearchDestButton.Click += OperationButtonSearchDest_Click;
-          row.SourceText.LostFocus += OperationTextBoxSource_LostFocus;
-          row.DestText.LostFocus += OperationTextBoxDest_LostFocus;
-          row.Mirror.Checked += OperationCheckMirror_enable;
-          row.Move.Checked += OperationCheckMove_enable;
-          row.OnlyNewer.Checked += OperationCheckOnlyNewer_enable;
-
-          Grid.SetColumn(row.SearchSourceButton, 1);
-          Grid.SetRow(row.SearchSourceButton, operationIndex);
-          Grid.SetColumn(row.SourceText, 2);
-          Grid.SetRow(row.SourceText, operationIndex);
-          Grid.SetColumn(row.SearchDestButton, 3);
-          Grid.SetRow(row.SearchDestButton, operationIndex);
-          Grid.SetColumn(row.DestText, 4);
-          Grid.SetRow(row.DestText, operationIndex);
-          Grid.SetColumn(row.ExclFilesButton, 5);
-          Grid.SetRow(row.ExclFilesButton, operationIndex);
-          Grid.SetColumn(row.ExclFoldersButton, 6);
-          Grid.SetRow(row.ExclFoldersButton, operationIndex);
-          Grid.SetColumn(row.Mirror, 7);
-          Grid.SetRow(row.Mirror, operationIndex);
-          Grid.SetColumn(row.Move, 8);
-          Grid.SetRow(row.Move, operationIndex);
-          Grid.SetColumn(row.OnlyNewer, 9);
-          Grid.SetRow(row.OnlyNewer, operationIndex);
-          Grid.SetColumn(row.FATFileTime, 10);
-          Grid.SetRow(row.FATFileTime, operationIndex);
-
-
-          GridOperations.Children.Add(row.SearchSourceButton);
-          GridOperations.Children.Add(row.SourceText);
-          GridOperations.Children.Add(row.SearchDestButton);
-          GridOperations.Children.Add(row.DestText);
-          GridOperations.Children.Add(row.ExclFilesButton);
-          GridOperations.Children.Add(row.ExclFoldersButton);
-          GridOperations.Children.Add(row.Mirror);
-          GridOperations.Children.Add(row.Move);
-          GridOperations.Children.Add(row.OnlyNewer);
-          GridOperations.Children.Add(row.FATFileTime);
-
-          GridOperations.RegisterName(row.SourceText.Name, row.SourceText);
-          GridOperations.RegisterName(row.DestText.Name, row.DestText);
-          GridOperations.RegisterName(row.Mirror.Name, row.Mirror);
-          GridOperations.RegisterName(row.Move.Name, row.Move);
-          GridOperations.RegisterName(row.FATFileTime.Name, row.FATFileTime);
-          registeredNames.Add(row.SourceText.Name);
-          registeredNames.Add(row.DestText.Name);
-          registeredNames.Add(row.Mirror.Name);
-          registeredNames.Add(row.Move.Name);
-          registeredNames.Add(row.FATFileTime.Name);
-        } else
-        {
-          UIOperationArbitrary row = new UIOperationArbitrary(operationIndex);
-          row.Command.LostFocus += OperationTextBoxCommand_LostFocus;
-          Grid.SetColumn(row.label, 1);
-          Grid.SetRow(row.label, operationIndex);
-          Grid.SetColumn(row.Command, 2);
-          Grid.SetColumnSpan(row.Command, 9);
-          Grid.SetRow(row.Command, operationIndex);
-          GridOperations.Children.Add(row.label);
-          GridOperations.Children.Add(row.Command);
-        }
-
-        CheckBox enabled = new CheckBox();
-        enabled.Content = "Enabled";
-        enabled.IsChecked = operation.enabled;
-        enabled.HorizontalAlignment = HorizontalAlignment.Center;
-        enabled.VerticalAlignment = VerticalAlignment.Center;
-        enabled.Tag = operationIndex;
-        enabled.Checked += (sender, e) =>
-        {
-          CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
-          int index = Convert.ToInt32(s.Tag);
-          OperationsList[index].enabled = true;
-        };
-        enabled.Unchecked += (sender, e) =>
-        {
-          CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
-          int index = Convert.ToInt32(s.Tag);
-          OperationsList[index].enabled = false;
-        };
-        Grid.SetColumn(enabled, 0);
-        Grid.SetRow(enabled, operationIndex);
-
-        Button remove = new Button();
-        remove.Content = "-";
-        remove.HorizontalAlignment = HorizontalAlignment.Center;
-        remove.VerticalAlignment = VerticalAlignment.Center;
-        remove.Width = 60;
-        remove.Tag = operationIndex;
-        remove.Click += (s, e) =>
-        {
-
-          Button sender = s as Button ?? throw new Exception("Sender is null");
-          int index = Convert.ToInt32(sender.Tag);
-          OperationsList.RemoveAt(index);
-          List<Control> toDelete = new List<Control>();
-          foreach (Control control in GridOperations.Children)
-          {
-            if((int)control.GetValue(Grid.RowProperty) == index)
-            {
-              toDelete.Add(control);
-            }
-            if ((int)control.GetValue(Grid.RowProperty) > index)
-            {
-              Grid.SetRow(control, (int)control.GetValue(Grid.RowProperty) - 1);
-              control.Tag = Convert.ToInt32(control.Tag) - 1;
-            }
-          }
-          foreach (UIElement control in toDelete)
-          {
-            GridOperations.Children.Remove(control);
-          }
-          GridOperations.RowDefinitions.RemoveAt(index);
-        };
-        Grid.SetColumn(remove, 11);
-        Grid.SetRow(remove, operationIndex);
-
-        GridOperations.Children.Add(enabled);
-        GridOperations.Children.Add(remove);
-
+        AddOperationRow(operation, operationIndex);
         operationIndex++;
       }
 
@@ -429,24 +433,36 @@ namespace robocopy_gui
       GridOperations.RowDefinitions.Add(addRow);
 
       Button add = new Button();
+      add.Name = "ButtonAddRobocopy";
       add.Content = "+ Operation";
       add.HorizontalAlignment = HorizontalAlignment.Left;
       add.VerticalAlignment = VerticalAlignment.Center;
       add.Width = 240;
       add.Click += (s, e) =>
       {
-        OperationsList.Add(new Operation(string.Empty, string.Empty));
-        renderList();
+        Operation newOp = new Operation(string.Empty, string.Empty);
+        OperationsList.Add(newOp);
+        Button addArbitrary = GridOperations.FindName("ButtonAddArbitrary") as Button ?? throw new Exception("Couldn't find ButtonAddArbitrary");
+        int currentAddRow = (int)addArbitrary.GetValue(Grid.RowProperty);
+        AddOperationRow(newOp, currentAddRow);
+        Grid.SetRow(addArbitrary, currentAddRow + 1);
+        Grid.SetRow(s as Control, currentAddRow + 1);
       };
       Button addArbitrary = new Button();
+      addArbitrary.Name = "ButtonAddArbitrary";
       addArbitrary.Content = "+ Arbitrary Command";
       addArbitrary.HorizontalAlignment = HorizontalAlignment.Left;
       addArbitrary.VerticalAlignment = VerticalAlignment.Center;
       addArbitrary.Width = 240;
       addArbitrary.Click += (s, e) =>
       {
-        OperationsList.Add(new Operation(true, true, string.Empty));
-        renderList();
+        Operation newOp = new Operation(true, true, string.Empty);
+        OperationsList.Add(newOp);
+        Button addRobocopy = GridOperations.FindName("ButtonAddRobocopy") as Button ?? throw new Exception("Couldn't find ButtonAddRobocopy");
+        int currentAddRow = (int)addRobocopy.GetValue(Grid.RowProperty);
+        AddOperationRow(newOp, currentAddRow);
+        Grid.SetRow(addRobocopy, currentAddRow + 1);
+        Grid.SetRow(s as Control, currentAddRow + 1);
       };
       Grid.SetColumn(add, 7);
       Grid.SetColumnSpan(add, 4);
@@ -456,6 +472,9 @@ namespace robocopy_gui
 
       GridOperations.Children.Add(add);
       GridOperations.Children.Add(addArbitrary);
+      GridOperations.RegisterName(add.Name, add);
+      GridOperations.RegisterName(addArbitrary.Name, addArbitrary);
+      registeredNames.Add(addArbitrary.Name);
       GroupOperations.Visibility = Visibility.Visible;
     }
 
