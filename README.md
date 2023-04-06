@@ -5,6 +5,5 @@
 
 ### To-Do
 
-- custom title for script
 - don't re-render entire list on operation add
 - add file to windows startup tasks

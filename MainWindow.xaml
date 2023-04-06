@@ -12,42 +12,54 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Robocopy GUI" Height="600" Width="1020" Closing="Window_Closing">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="48" />
-        </Grid.RowDefinitions>
-        <GroupBox Header="File" Height="96" VerticalAlignment="Top" Grid.Row="0" AllowDrop="True" Drop="InputFile_Drop">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="120" />
-                </Grid.ColumnDefinitions>
-                <TextBox x:Name="InputFilePath" Margin="10,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" LostFocus="InputFilePath_LostFocus" KeyDown="InputFilePath_KeyDown" AllowDrop="True" Drop="InputFile_Drop"/>
-                <Button x:Name="ButtonPickFile" Content="Search..." VerticalAlignment="Center" Grid.Column="1" Width="100" HorizontalAlignment="Center" Click="ButtonPickFile_Click" AllowDrop="True" Drop="InputFile_Drop"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="GroupOperations" Header="Operations" Grid.Row="1" Visibility="Hidden">
-            <ScrollViewer>
-                <Grid x:Name="GridOperations">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="80" />
-                    </Grid.ColumnDefinitions>
-                </Grid>
-            </ScrollViewer>
-        </GroupBox>
-    <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Row="2" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="48" />
+    </Grid.RowDefinitions>
+    <GroupBox Header="File" Height="96" VerticalAlignment="Top" Grid.Row="0" AllowDrop="True" Drop="InputFile_Drop">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="120" />
+        </Grid.ColumnDefinitions>
+        <Label Content="File Path:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="InputFilePath" Margin="5,10,0,0" TextWrapping="NoWrap" Grid.Column="1" VerticalAlignment="Top" LostFocus="InputFilePath_LostFocus" KeyDown="InputFilePath_KeyDown" AllowDrop="True" Drop="InputFile_Drop" />
+        <Button x:Name="ButtonPickFile" Content="Search..." VerticalAlignment="Center" Grid.Column="2" Width="100" HorizontalAlignment="Center" Click="ButtonPickFile_Click" AllowDrop="True" Drop="InputFile_Drop"/>
+      </Grid>
+    </GroupBox>
+    <GroupBox x:Name="GroupOperations" Header="Operations" Grid.Row="1" Visibility="Hidden">
+      <ScrollViewer>
+        <Grid x:Name="GridOperations">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="80" />
+          </Grid.ColumnDefinitions>
+        </Grid>
+      </ScrollViewer>
+    </GroupBox>
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="170" />
+      </Grid.ColumnDefinitions>
+
+      <Label Content="Script Title:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Grid.Column="0"/>
+      <TextBox x:Name="InputScriptTitle" Margin="5,10,0,0" Grid.Column="1" TextWrapping="NoWrap" VerticalAlignment="Top" LostFocus="InputScriptTitle_LostFocus" KeyDown="InputScriptTitle_KeyDown" />
+      <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Column="3" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
     </Grid>
+  </Grid>
 </Window>

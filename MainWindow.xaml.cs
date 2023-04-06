@@ -114,6 +114,17 @@ namespace robocopy_gui
         ButtonCommit.IsEnabled = true;
       }
     }
+    private void InputScriptTitle_LostFocus(object sender, RoutedEventArgs e)
+    {
+      scriptTitle = InputScriptTitle.Text;
+    }
+    private void InputScriptTitle_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+      if (e.Key == System.Windows.Input.Key.Enter)
+      {
+        InputScriptTitle_LostFocus(sender, e);
+      }
+    }
 
     /*                      ROUTINES FOR GENERATED OPERATION ROW UI ELEMENTS
      * ===============================================================================
@@ -228,7 +239,7 @@ namespace robocopy_gui
       List<string> operationStrings = new List<string>();
       using (StreamReader reader = File.OpenText(currentFile))
       {
-        int skipFirstLines = 2; // 0 to disable - designed to skip echo off and title XYZ at the beginning of file
+        int skipFirstLines = 1; // 0 to disable - 1 is designed to skip "echo off" at the beginning of file
         for (int i = 0; i < skipFirstLines; i++)
         {
           reader.ReadLine();
@@ -249,13 +260,19 @@ namespace robocopy_gui
       {
         if(operation.ToLower().StartsWith("robocopy") || operation.ToLower().StartsWith("rem robocopy") ) {
           OperationsList.Add(new Operation(operation));
-        } else if(operation.ToLower().StartsWith("rem ") && !operation.ToLower().StartsWith("rem echo") )
+        }
+        else if (operation.ToLower().StartsWith("title "))
+        {
+          scriptTitle = operation.Substring(6);
+          InputScriptTitle.Text = scriptTitle;
+        }
+        else if(operation.ToLower().StartsWith("rem ") && !operation.ToLower().StartsWith("rem echo") )
         {
           OperationsList.Add(new Operation(true, false, operation.Substring(3)));
         } else if (!operation.ToLower().StartsWith("echo"))
         {
           OperationsList.Add(new Operation(true, true, operation));
-        }
+        } 
       }
 
       //display rows of operations
@@ -412,19 +429,33 @@ namespace robocopy_gui
       GridOperations.RowDefinitions.Add(addRow);
 
       Button add = new Button();
-      add.Content = "+";
-      add.HorizontalAlignment = HorizontalAlignment.Center;
+      add.Content = "+ Operation";
+      add.HorizontalAlignment = HorizontalAlignment.Left;
       add.VerticalAlignment = VerticalAlignment.Center;
-      add.Width = 60;
+      add.Width = 240;
       add.Click += (s, e) =>
       {
         OperationsList.Add(new Operation(string.Empty, string.Empty));
         renderList();
       };
-      Grid.SetColumn(add, 11);
+      Button addArbitrary = new Button();
+      addArbitrary.Content = "+ Arbitrary Command";
+      addArbitrary.HorizontalAlignment = HorizontalAlignment.Left;
+      addArbitrary.VerticalAlignment = VerticalAlignment.Center;
+      addArbitrary.Width = 240;
+      addArbitrary.Click += (s, e) =>
+      {
+        OperationsList.Add(new Operation(true, true, string.Empty));
+        renderList();
+      };
+      Grid.SetColumn(add, 7);
+      Grid.SetColumnSpan(add, 4);
       Grid.SetRow(add, operationIndex);
+      Grid.SetColumn(addArbitrary, 4);
+      Grid.SetRow(addArbitrary, operationIndex);
 
       GridOperations.Children.Add(add);
+      GridOperations.Children.Add(addArbitrary);
       GroupOperations.Visibility = Visibility.Visible;
     }
 
@@ -438,7 +469,7 @@ namespace robocopy_gui
 
     private void ButtonCommit_Click(object sender, RoutedEventArgs e)
     {
-      MessageBox.Show("Inspect!");  // set breakpoint here for convenient variable inspection
+      // MessageBox.Show("Inspect!");  // set breakpoint here for convenient variable inspection
       
       StreamWriter file;
       if (!File.Exists(currentFile))
@@ -454,7 +485,8 @@ namespace robocopy_gui
 
       foreach (Operation item in OperationsList)
       {
-        if (item.isArbitrary || (!string.IsNullOrWhiteSpace(item.SourceFolder) && !string.IsNullOrWhiteSpace(item.DestinationFolder)))
+        if ( (item.isArbitrary && !string.IsNullOrWhiteSpace(item.arbitraryCommand) ) ||
+          ( !string.IsNullOrWhiteSpace(item.SourceFolder) && !string.IsNullOrWhiteSpace(item.DestinationFolder) ) )
         {
           file.WriteLine();
           if (!item.enabled)
