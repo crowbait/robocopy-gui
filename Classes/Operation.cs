@@ -12,7 +12,7 @@ namespace robocopy_gui.Classes
     public string SourceFolder { get; set; }
     public string DestinationFolder { get; set; }
     public bool IsMirror { get; set; } //true -> delete extra files not present in source | false -> keep extra files (/e /xx)
-                                     //mirror and move are mutually exclusive
+                                       //mirror and move are mutually exclusive
     public bool IsMove { get; set; } = false; //true -> move files instead of copying, needs /e /xx
     public bool IsOnlyIfNewer { get; set; } = false; //ignore if target file is newer
     public bool IsUseFATTime { get; set; } = false; //useful when copying between two file systems, 2s precision
@@ -33,8 +33,6 @@ namespace robocopy_gui.Classes
       IsMirror = mirrorFlag;
       ExcludeFiles = new List<string>();
       ExcludeFolders = new List<string>();
-      MultiThreadCount = 5;
-      RetryCount = 5;
     }
     public Operation(
         string source,

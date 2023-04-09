@@ -386,6 +386,8 @@ namespace robocopy_gui
         Grid.SetRow(row.Command, operationIndex);
         GridOperations.Children.Add(row.Label);
         GridOperations.Children.Add(row.Command);
+        GridOperations.RegisterName(row.Command.Name, row.Command);
+        registeredNames.Add(row.Command.Name);
       }
 
       CheckBox enabled = new CheckBox
@@ -430,11 +432,46 @@ namespace robocopy_gui
         {
           if ((int)control.GetValue(Grid.RowProperty) == index)
           {
-            toDelete.Add(control);
+            toDelete.Add(control);  //the separate list is needed for type conversion to UIElement
+            if( !string.IsNullOrWhiteSpace(control.Name) )
+            {
+              GridOperations.UnregisterName(control.Name);
+              registeredNames.Remove(control.Name);
+            }
           }
           if ((int)control.GetValue(Grid.RowProperty) > index)
           {
             Grid.SetRow(control, (int)control.GetValue(Grid.RowProperty) - 1);
+            if( !string.IsNullOrWhiteSpace(control.Name) )
+            {
+              GridOperations.UnregisterName(control.Name);
+              registeredNames.Remove(control.Name);
+              if(control.Name.StartsWith("source"))
+              {
+                control.Name = "source" + (Convert.ToInt32(control.Tag) - 1);
+              } else if (control.Name.StartsWith("dest"))
+              {
+                control.Name = "dest" + (Convert.ToInt32(control.Tag) - 1);
+              }
+              else if (control.Name.StartsWith("mirror"))
+              {
+                control.Name = "mirror" + (Convert.ToInt32(control.Tag) - 1);
+              }
+              else if (control.Name.StartsWith("move"))
+              {
+                control.Name = "move" + (Convert.ToInt32(control.Tag) - 1);
+              }
+              else if (control.Name.StartsWith("FATtime"))
+              {
+                control.Name = "FATtime" + (Convert.ToInt32(control.Tag) - 1);
+              }
+              else if (control.Name.StartsWith("arbitraryCommand"))
+              {
+                control.Name = "arbitraryCommand" + (Convert.ToInt32(control.Tag) - 1);
+              }
+              GridOperations.RegisterName(control.Name, control);
+              registeredNames.Add(control.Name);
+            }
             control.Tag = Convert.ToInt32(control.Tag) - 1;
           }
         }
@@ -479,9 +516,9 @@ namespace robocopy_gui
         OperationsList.Add(newOp);
         Button addArbitrary = GridOperations.FindName("ButtonAddArbitrary") as Button ?? throw new Exception("Couldn't find ButtonAddArbitrary");
         int currentAddRow = (int)addArbitrary.GetValue(Grid.RowProperty);
-        AddOperationRow(newOp, currentAddRow);
         Grid.SetRow(addArbitrary, currentAddRow + 1);
         Grid.SetRow(s as Control, currentAddRow + 1);
+        AddOperationRow(newOp, currentAddRow);
       };
       Button addArbitrary = new Button
       {
@@ -497,14 +534,15 @@ namespace robocopy_gui
         OperationsList.Add(newOp);
         Button addRobocopy = GridOperations.FindName("ButtonAddRobocopy") as Button ?? throw new Exception("Couldn't find ButtonAddRobocopy");
         int currentAddRow = (int)addRobocopy.GetValue(Grid.RowProperty);
-        AddOperationRow(newOp, currentAddRow);
         Grid.SetRow(addRobocopy, currentAddRow + 1);
         Grid.SetRow(s as Control, currentAddRow + 1);
+        AddOperationRow(newOp, currentAddRow);
       };
       Grid.SetColumn(add, 7);
       Grid.SetColumnSpan(add, 4);
       Grid.SetRow(add, operationIndex);
       Grid.SetColumn(addArbitrary, 4);
+      Grid.SetColumnSpan(addArbitrary, 3);
       Grid.SetRow(addArbitrary, operationIndex);
 
       GridOperations.Children.Add(add);

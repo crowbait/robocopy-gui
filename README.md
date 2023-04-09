@@ -36,3 +36,6 @@ Both assembly types are build for x64 Windows.
 - migrate to UWP or WinUI 3 to enable the following features:
   - drag-and-drop reordering of operations
   - visual grouping of operations for a less convoluted interface
+- settings dialog per operation
+  - move less important checkboxes (only newer, FAT file time)
+  - options to set retry count and multithreading
