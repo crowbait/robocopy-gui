@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge  css-c1sh5i"
+   focusable="false"
+   aria-hidden="true"
+   viewBox="0 0 24 24"
+   data-testid="SettingsBackupRestoreIcon"
+   aria-label="fontSize large"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="34.291667"
+     inkscape:cx="12"
+     inkscape:cy="12.014581"
+     inkscape:window-width="1920"
+     inkscape:window-height="1129"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     d="m 15,11.714286 c 0,-0.942857 -0.771429,-1.7142864 -1.714286,-1.7142864 -0.942857,0 -1.714285,0.7714294 -1.714285,1.7142864 0,0.942857 0.771428,1.714285 1.714285,1.714285 C 14.228571,13.428571 15,12.657143 15,11.714286 Z M 13.285714,4 C 9.0257143,4 5.5714286,7.4542857 5.5714286,11.714286 H 3 l 3.4285714,3.428571 3.4285715,-3.428571 H 7.2857143 c 0,-3.3171431 2.6828571,-6.0000003 5.9999997,-6.0000003 3.317143,0 6,2.6828572 6,6.0000003 0,3.317143 -2.682857,6 -6,6 -1.294285,0 -2.494285,-0.42 -3.4799997,-1.114286 L 8.5885714,17.834286 C 9.8914286,18.828571 11.52,19.428571 13.285714,19.428571 17.545714,19.428571 21,15.974286 21,11.714286 21,7.4542857 17.545714,4 13.285714,4 Z"
+     id="path2"
+     style="stroke-width:0.857143" />
+</svg>

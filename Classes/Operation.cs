@@ -149,6 +149,7 @@ namespace robocopy_gui.Classes
             i++;
             if (i > parts.Length - 1) { break; }
           }
+          if (i > parts.Length - 1) { break; }
         }
         if (parts[i].ToLower() == "/xd")    //get excluded folder patterns
         {
