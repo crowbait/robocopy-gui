@@ -13,18 +13,22 @@ namespace robocopy_gui.Classes
     {
       Index = operationIndex;
 
-      Label = new Label();
-      Label.Content = "Command:";
-      Label.HorizontalAlignment = HorizontalAlignment.Center;
-      Label.VerticalAlignment = VerticalAlignment.Center;
+      Label = new Label
+      {
+        Content = "Command:",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center
+      };
 
-      Command = new TextBox();
-      Command.Name = "arbitraryCommand" + operationIndex;
-      Command.Text = MainWindow.OperationsList[operationIndex].arbitraryCommand;
-      Command.VerticalAlignment = VerticalAlignment.Top;
-      Command.Margin = new Thickness(10, 10, 0, 0);
-      Command.TextWrapping = TextWrapping.NoWrap;
-      Command.Tag = operationIndex;
+      Command = new TextBox
+      {
+        Name = "arbitraryCommand" + operationIndex,
+        Text = MainWindow.OperationsList[operationIndex].Command,
+        VerticalAlignment = VerticalAlignment.Top,
+        Margin = new Thickness(10, 10, 0, 0),
+        TextWrapping = TextWrapping.NoWrap,
+        Tag = operationIndex
+      };
     }
   }
 }

@@ -266,7 +266,7 @@ namespace robocopy_gui.Classes
         + DestinationFolder.Substring(0, 2) + " " + DestinationFolder.Split("\\")[DestinationFolder.Split("\\").Length - 1];
       }
     }
-    public string CreateName(string source, string destination)
+    public static string CreateName(string source, string destination)
     {
       if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(destination))
       {

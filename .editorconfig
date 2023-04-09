@@ -11,3 +11,7 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = true
+
+[*.cs]
+# Suppress 'new-expression can be simplified because fully-qualified new()'s make for more intuitive code
+dotnet_diagnostic.IDE0090.severity=silent

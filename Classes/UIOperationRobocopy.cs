@@ -21,49 +21,54 @@ namespace robocopy_gui.Classes
     public UIOperationRobocopy(int operationIndex)
     {
       Index = operationIndex;
-      SearchSourceButton = new Button();
-      SourceText = new TextBox();
-      SearchDestButton = new Button();
-      DestText = new TextBox();
-      ExclFilesButton = new Button();
-      ExclFoldersButton = new Button();
-      Mirror = new CheckBox();
-      Move = new CheckBox();
-      OnlyNewer = new CheckBox();
-      FATFileTime = new CheckBox();
 
-      SearchSourceButton.Content = "Search...";
-      SearchSourceButton.HorizontalAlignment = HorizontalAlignment.Center;
-      SearchSourceButton.VerticalAlignment = VerticalAlignment.Center;
-      SearchSourceButton.Width = 100;
-      SearchSourceButton.Tag = operationIndex;
+      SearchSourceButton = new Button
+      {
+        Content = "Search...",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 100,
+        Tag = operationIndex
+      };
 
-      SourceText.Name = "source" + operationIndex;
-      SourceText.Text = MainWindow.OperationsList[operationIndex].SourceFolder;
-      SourceText.VerticalAlignment = VerticalAlignment.Top;
-      SourceText.Margin = new Thickness(10, 10, 0, 0);
-      SourceText.TextWrapping = TextWrapping.NoWrap;
-      SourceText.Tag = operationIndex;
+      SourceText = new TextBox
+      {
+        Name = "source" + operationIndex,
+        Text = MainWindow.OperationsList[operationIndex].SourceFolder,
+        VerticalAlignment = VerticalAlignment.Top,
+        Margin = new Thickness(10, 10, 0, 0),
+        TextWrapping = TextWrapping.NoWrap,
+        Tag = operationIndex
+      };
 
-      SearchDestButton.Content = "Search...";
-      SearchDestButton.HorizontalAlignment = HorizontalAlignment.Center;
-      SearchDestButton.VerticalAlignment = VerticalAlignment.Center;
-      SearchDestButton.Width = 100;
-      SearchDestButton.Tag = operationIndex;
+      SearchDestButton = new Button
+      {
+        Content = "Search...",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 100,
+        Tag = operationIndex
+      };
 
-      DestText.Name = "dest" + operationIndex;
-      DestText.Text = MainWindow.OperationsList[operationIndex].DestinationFolder;
-      DestText.VerticalAlignment = VerticalAlignment.Top;
-      DestText.Margin = new Thickness(10, 10, 0, 0);
-      DestText.TextWrapping = TextWrapping.NoWrap;
-      DestText.Tag = operationIndex;
+      DestText = new TextBox
+      {
+        Name = "dest" + operationIndex,
+        Text = MainWindow.OperationsList[operationIndex].DestinationFolder,
+        VerticalAlignment = VerticalAlignment.Top,
+        Margin = new Thickness(10, 10, 0, 0),
+        TextWrapping = TextWrapping.NoWrap,
+        Tag = operationIndex
+      };
 
-      ExclFilesButton.Content = "Exclude\nFiles: " + MainWindow.OperationsList[operationIndex].ExcludeFiles.Count;
-      ExclFilesButton.FontSize = 10;
-      ExclFilesButton.HorizontalAlignment = HorizontalAlignment.Center;
-      ExclFilesButton.VerticalAlignment = VerticalAlignment.Center;
-      ExclFilesButton.Width = 100;
-      ExclFilesButton.Tag = operationIndex;
+      ExclFilesButton = new Button
+      {
+        Content = "Exclude\nFiles: " + MainWindow.OperationsList[operationIndex].ExcludeFiles.Count,
+        FontSize = 10,
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 100,
+        Tag = operationIndex
+      };
       ExclFilesButton.Click += (s, e) =>
       {
         Button sender = s as Button ?? throw new Exception("Sender is null");
@@ -79,12 +84,15 @@ namespace robocopy_gui.Classes
         }
       };
 
-      ExclFoldersButton.Content = "Exclude\nFolders: " + MainWindow.OperationsList[operationIndex].ExcludeFolders.Count;
-      ExclFoldersButton.FontSize = 10;
-      ExclFoldersButton.HorizontalAlignment = HorizontalAlignment.Center;
-      ExclFoldersButton.VerticalAlignment = VerticalAlignment.Center;
-      ExclFoldersButton.Width = 100;
-      ExclFoldersButton.Tag = operationIndex;
+      ExclFoldersButton = new Button
+      {
+        Content = "Exclude\nFolders: " + MainWindow.OperationsList[operationIndex].ExcludeFolders.Count,
+        FontSize = 10,
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 100,
+        Tag = operationIndex
+      };
       ExclFoldersButton.Click += (s, e) =>
       {
         Button sender = s as Button ?? throw new Exception("Sender is null");
@@ -100,13 +108,16 @@ namespace robocopy_gui.Classes
         }
       };
 
-      Mirror.Name = "mirror" + operationIndex;
-      Mirror.Content = "Mirror";
-      Mirror.IsChecked = MainWindow.OperationsList[operationIndex].IsMirror;
-      Mirror.ToolTip = "Copy files to destination folder, removing files from the destination that are not present in the source folder.";
-      Mirror.HorizontalAlignment = HorizontalAlignment.Center;
-      Mirror.VerticalAlignment = VerticalAlignment.Center;
-      Mirror.Tag = operationIndex;
+      Mirror = new CheckBox
+      {
+        Name = "mirror" + operationIndex,
+        Content = "Mirror",
+        IsChecked = MainWindow.OperationsList[operationIndex].IsMirror,
+        ToolTip = "Copy files to destination folder, removing files from the destination that are not present in the source folder.",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Tag = operationIndex
+      };
       Mirror.Unchecked += (sender, e) =>
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
@@ -114,13 +125,16 @@ namespace robocopy_gui.Classes
         MainWindow.OperationsList[index].IsMirror = false;
       };
 
-      Move.Name = "move" + operationIndex;
-      Move.Content = "Move";
-      Move.IsChecked = MainWindow.OperationsList[operationIndex].IsMove;
-      Move.ToolTip = "Move files to the destination folder rather than copying them, removing them from the source folder.";
-      Move.HorizontalAlignment = HorizontalAlignment.Center;
-      Move.VerticalAlignment = VerticalAlignment.Center;
-      Move.Tag = operationIndex;
+      Move = new CheckBox
+      {
+        Name = "move" + operationIndex,
+        Content = "Move",
+        IsChecked = MainWindow.OperationsList[operationIndex].IsMove,
+        ToolTip = "Move files to the destination folder rather than copying them, removing them from the source folder.",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Tag = operationIndex
+      };
       Move.Unchecked += (sender, e) =>
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
@@ -128,12 +142,15 @@ namespace robocopy_gui.Classes
         MainWindow.OperationsList[index].IsMove = false;
       };
 
-      OnlyNewer.Content = "Only newer";
-      OnlyNewer.IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer;
-      OnlyNewer.ToolTip = "Copy or move files to the destination folder only if the source file is newer than the target file.";
-      OnlyNewer.HorizontalAlignment = HorizontalAlignment.Center;
-      OnlyNewer.VerticalAlignment = VerticalAlignment.Center;
-      OnlyNewer.Tag = operationIndex;
+      OnlyNewer = new CheckBox
+      {
+        Content = "Only newer",
+        IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer,
+        ToolTip = "Copy or move files to the destination folder only if the source file is newer than the target file.",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Tag = operationIndex
+      };
       OnlyNewer.Unchecked += (sender, e) =>
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
@@ -141,13 +158,16 @@ namespace robocopy_gui.Classes
         MainWindow.OperationsList[index].IsOnlyIfNewer = false;
       };
 
-      FATFileTime.Name = "FATtime" + operationIndex;
-      FATFileTime.Content = "FAT-Time";
-      FATFileTime.IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer;
-      FATFileTime.ToolTip = "Use FAT-style time format when writing file. Useful when copying to another file system and when using \"only newer files\".";
-      FATFileTime.HorizontalAlignment = HorizontalAlignment.Center;
-      FATFileTime.VerticalAlignment = VerticalAlignment.Center;
-      FATFileTime.Tag = operationIndex;
+      FATFileTime = new CheckBox
+      {
+        Name = "FATtime" + operationIndex,
+        Content = "FAT-Time",
+        IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer,
+        ToolTip = "Use FAT-style time format when writing file. Useful when copying to another file system and when using \"only newer files\".",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Tag = operationIndex
+      };
       FATFileTime.Checked += (sender, e) =>
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");

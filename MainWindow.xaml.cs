@@ -14,7 +14,7 @@ namespace robocopy_gui
   /// </summary>
   public partial class MainWindow : Window
   {
-    public static List<Operation> OperationsList = new List<Operation>();
+    public static List<Operation> OperationsList { get; set; } = new List<Operation>();
     private List<string> registeredNames = new List<string>();
     private string currentFile = "";
     private string scriptTitle = "Backup";
@@ -40,9 +40,11 @@ namespace robocopy_gui
     private void ButtonPickFile_Click(object sender, RoutedEventArgs e)
     {
       //pick batch file
-      OpenFileDialog openFileDialog = new OpenFileDialog();
-      openFileDialog.CheckFileExists = false;
-      openFileDialog.Filter = "Batch Files (*.bat)|*.bat";
+      OpenFileDialog openFileDialog = new OpenFileDialog
+      {
+        CheckFileExists = false,
+        Filter = "Batch Files (*.bat)|*.bat"
+      };
       if (openFileDialog.ShowDialog() == true)
       {
         string fileName = openFileDialog.FileName;
@@ -143,9 +145,11 @@ namespace robocopy_gui
     {
       Button s = sender as Button ?? throw new Exception("Sender is null");
       int index = Convert.ToInt32(s.Tag);
-      CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-      dialog.InitialDirectory = Path.GetDirectoryName(MainWindow.OperationsList[index].SourceFolder);
-      dialog.IsFolderPicker = true;
+      CommonOpenFileDialog dialog = new CommonOpenFileDialog
+      {
+        InitialDirectory = Path.GetDirectoryName(MainWindow.OperationsList[index].SourceFolder),
+        IsFolderPicker = true
+      };
       if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
       {
         OperationsList[index].SourceFolder = dialog.FileName;
@@ -158,9 +162,11 @@ namespace robocopy_gui
     {
       Button s = sender as Button ?? throw new Exception("Sender is null");
       int index = Convert.ToInt32(s.Tag);
-      CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-      dialog.InitialDirectory = Path.GetDirectoryName(OperationsList[index].DestinationFolder);
-      dialog.IsFolderPicker = true;
+      CommonOpenFileDialog dialog = new CommonOpenFileDialog
+      {
+        InitialDirectory = Path.GetDirectoryName(OperationsList[index].DestinationFolder),
+        IsFolderPicker = true
+      };
       if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
       {
         OperationsList[index].DestinationFolder = dialog.FileName;
@@ -299,8 +305,10 @@ namespace robocopy_gui
     }
     private void AddOperationRow(Operation operation, int operationIndex)
     {
-      RowDefinition newRow = new RowDefinition();
-      newRow.Height = new GridLength(42);
+      RowDefinition newRow = new RowDefinition
+      {
+        Height = new GridLength(42)
+      };
       GridOperations.RowDefinitions.Add(newRow);
 
       if (!operation.IsArbitrary)
@@ -371,12 +379,14 @@ namespace robocopy_gui
         GridOperations.Children.Add(row.Command);
       }
 
-      CheckBox enabled = new CheckBox();
-      enabled.Content = "Enabled";
-      enabled.IsChecked = operation.IsEnabled;
-      enabled.HorizontalAlignment = HorizontalAlignment.Center;
-      enabled.VerticalAlignment = VerticalAlignment.Center;
-      enabled.Tag = operationIndex;
+      CheckBox enabled = new CheckBox
+      {
+        Content = "Enabled",
+        IsChecked = operation.IsEnabled,
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Tag = operationIndex
+      };
       enabled.Checked += (sender, e) =>
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
@@ -392,12 +402,14 @@ namespace robocopy_gui
       Grid.SetColumn(enabled, 0);
       Grid.SetRow(enabled, operationIndex);
 
-      Button remove = new Button();
-      remove.Content = "-";
-      remove.HorizontalAlignment = HorizontalAlignment.Center;
-      remove.VerticalAlignment = VerticalAlignment.Center;
-      remove.Width = 60;
-      remove.Tag = operationIndex;
+      Button remove = new Button
+      {
+        Content = "-",
+        HorizontalAlignment = HorizontalAlignment.Center,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 60,
+        Tag = operationIndex
+      };
       remove.Click += (s, e) =>
       {
 
@@ -438,16 +450,20 @@ namespace robocopy_gui
         operationIndex++;
       }
 
-      RowDefinition addRow = new RowDefinition();
-      addRow.Height = new GridLength(42);
+      RowDefinition addRow = new RowDefinition
+      {
+        Height = new GridLength(42)
+      };
       GridOperations.RowDefinitions.Add(addRow);
 
-      Button add = new Button();
-      add.Name = "ButtonAddRobocopy";
-      add.Content = "+ Operation";
-      add.HorizontalAlignment = HorizontalAlignment.Left;
-      add.VerticalAlignment = VerticalAlignment.Center;
-      add.Width = 240;
+      Button add = new Button
+      {
+        Name = "ButtonAddRobocopy",
+        Content = "+ Operation",
+        HorizontalAlignment = HorizontalAlignment.Left,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 240
+      };
       add.Click += (s, e) =>
       {
         Operation newOp = new Operation(string.Empty, string.Empty);
@@ -458,12 +474,14 @@ namespace robocopy_gui
         Grid.SetRow(addArbitrary, currentAddRow + 1);
         Grid.SetRow(s as Control, currentAddRow + 1);
       };
-      Button addArbitrary = new Button();
-      addArbitrary.Name = "ButtonAddArbitrary";
-      addArbitrary.Content = "+ Arbitrary Command";
-      addArbitrary.HorizontalAlignment = HorizontalAlignment.Left;
-      addArbitrary.VerticalAlignment = VerticalAlignment.Center;
-      addArbitrary.Width = 240;
+      Button addArbitrary = new Button
+      {
+        Name = "ButtonAddArbitrary",
+        Content = "+ Arbitrary Command",
+        HorizontalAlignment = HorizontalAlignment.Left,
+        VerticalAlignment = VerticalAlignment.Center,
+        Width = 240
+      };
       addArbitrary.Click += (s, e) =>
       {
         Operation newOp = new Operation(true, true, string.Empty);
