@@ -26,6 +26,7 @@
 There are 2 versions published:
 - framework-dependent: requires .NET-Framework 7.0 to be installed, but is a much smaller executable
 - self-contained: does not have outside dependencies, but is much larger
+
 Both assembly types are build for x64 Windows
 
 ## To-do
