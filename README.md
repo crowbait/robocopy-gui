@@ -23,7 +23,7 @@
 
 ## Installation
 
-Grab your executable from the [release page](https://github.com/crowbait/robocopy-gui).
+Grab your executable from the [release page](https://github.com/crowbait/robocopy-gui/releases).
 
 There are 2 versions published:
 - framework-dependent: requires .NET-Framework 7.0 to be installed, but is a much smaller executable
