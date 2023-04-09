@@ -2,17 +2,22 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <OutputPath>bin\</OutputPath>
     <TargetFramework>net7.0-windows</TargetFramework>
     <RootNamespace>robocopy_gui</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <StartupObject>robocopy_gui.App</StartupObject>
     <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <IsPublishable>False</IsPublishable>
+    <IsPublishable>True</IsPublishable>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

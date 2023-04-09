@@ -22,18 +22,27 @@ namespace robocopy_gui
     public MainWindow()
     {
       InitializeComponent();
-      MainWindow1.Width = Properties.Settings.Default.MainWindowWidth;
-      MainWindow1.Height = Properties.Settings.Default.MainWindowHeight;
-      string lastFile = Properties.Settings.Default.LastFile;
-      if (!string.IsNullOrWhiteSpace(lastFile))
+      try
       {
-        if (File.Exists(lastFile))
+        MainWindow1.Width = Properties.Settings.Default.MainWindowWidth;
+        MainWindow1.Height = Properties.Settings.Default.MainWindowHeight;
+        string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        this.Title = "Robocopy GUI " + version;
+        string lastFile = Properties.Settings.Default.LastFile;
+        if (!string.IsNullOrWhiteSpace(lastFile))
         {
-          InputFilePath.Text = lastFile;
-          currentFile = lastFile;
-          ButtonCommit.IsEnabled = true;
-          ReadFile();
+          if (File.Exists(lastFile))
+          {
+            InputFilePath.Text = lastFile;
+            currentFile = lastFile;
+            ButtonCommit.IsEnabled = true;
+            ReadFile();
+          }
         }
+      }
+      catch (Exception e)
+      {
+        MessageBox.Show(e.Message + e.StackTrace);
       }
     }
 
