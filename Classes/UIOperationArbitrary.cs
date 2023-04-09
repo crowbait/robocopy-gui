@@ -1,22 +1,22 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace robocopy_gui.Classes
 {
   internal class UIOperationArbitrary
   {
-    public int index { get; set; }
-    public Label label { get; set; }
+    public int Index { get; set; }
+    public Label Label { get; set; }
     public TextBox Command { get; set; }
 
     public UIOperationArbitrary(int operationIndex)
     {
-      index = operationIndex;
+      Index = operationIndex;
 
-      label = new Label();
-      label.Content = "Command:";
-      label.HorizontalAlignment = HorizontalAlignment.Center;
-      label.VerticalAlignment = VerticalAlignment.Center;
+      Label = new Label();
+      Label.Content = "Command:";
+      Label.HorizontalAlignment = HorizontalAlignment.Center;
+      Label.VerticalAlignment = VerticalAlignment.Center;
 
       Command = new TextBox();
       Command.Name = "arbitraryCommand" + operationIndex;

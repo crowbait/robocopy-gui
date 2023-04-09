@@ -5,17 +5,17 @@ namespace robocopy_gui.Classes
 {
   public class Operation
   {
-    public bool enabled { get; set; } = true;
-    public bool isArbitrary { get; set; } = false;
-    public string arbitraryCommand { get; set; } = string.Empty;
+    public bool IsEnabled { get; set; } = true;
+    public bool IsArbitrary { get; set; } = false;
+    public string Command { get; set; } = string.Empty;
     public string Name { get; set; }
     public string SourceFolder { get; set; }
     public string DestinationFolder { get; set; }
-    public bool mirror { get; set; } //true -> delete extra files not present in source | false -> keep extra files (/e /xx)
+    public bool IsMirror { get; set; } //true -> delete extra files not present in source | false -> keep extra files (/e /xx)
                                      //mirror and move are mutually exclusive
-    public bool move { get; set; } = false; //true -> move files instead of copying, needs /e /xx
-    public bool onlyIfNewer { get; set; } = false; //ignore if target file is newer
-    public bool useFATTime { get; set; } = false; //useful when copying between two file systems, 2s precision
+    public bool IsMove { get; set; } = false; //true -> move files instead of copying, needs /e /xx
+    public bool IsOnlyIfNewer { get; set; } = false; //ignore if target file is newer
+    public bool IsUseFATTime { get; set; } = false; //useful when copying between two file systems, 2s precision
     public List<string> ExcludeFiles { get; set; }
     public List<string> ExcludeFolders { get; set; }
     public int MultiThreadCount { get; set; } = 3;
@@ -30,7 +30,7 @@ namespace robocopy_gui.Classes
       SourceFolder = source;
       DestinationFolder = destination;
       Name = CreateName(source, destination);
-      mirror = mirrorFlag;
+      IsMirror = mirrorFlag;
       ExcludeFiles = new List<string>();
       ExcludeFolders = new List<string>();
       MultiThreadCount = 5;
@@ -49,7 +49,7 @@ namespace robocopy_gui.Classes
       Name = source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
           + " -> "
           + destination.Substring(0, 2) + " " + destination.Split("\\")[destination.Split("\\").Length - 1];
-      mirror = mirrorFlag;
+      IsMirror = mirrorFlag;
       if (excludeIsFolders)
       {
         ExcludeFiles = new List<string>();
@@ -74,7 +74,7 @@ namespace robocopy_gui.Classes
       Name = source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
           + " -> "
           + destination.Substring(0, 2) + " " + destination.Split("\\")[destination.Split("\\").Length - 1];
-      mirror = mirrorFlag;
+      IsMirror = mirrorFlag;
       ExcludeFiles = excludeFilePatterns;
       ExcludeFolders = excludeFolderPatterns;
     }
@@ -85,7 +85,7 @@ namespace robocopy_gui.Classes
       int i;
       if (parts[0].ToLower() == "rem")    //detect commented lines ("REM ...")
       {
-        enabled = false;
+        IsEnabled = false;
         i = 2;
       }
       else
@@ -123,15 +123,15 @@ namespace robocopy_gui.Classes
       SourceFolder = SourceFolder.Replace("\"", string.Empty);
       DestinationFolder = DestinationFolder.Replace("\"", string.Empty);
 
-      mirror = false;
+      IsMirror = false;
       ExcludeFiles = new List<string>();
       ExcludeFolders = new List<string>();
       while (i < parts.Length)      //check for flags
       {
-        if (parts[i].ToLower() == "/mir") { mirror = true; }
-        if (parts[i].ToLower() == "/mov") { move = true; }
-        if (parts[i].ToLower() == "/xo") { onlyIfNewer = true; }
-        if (parts[i].ToLower() == "/fft") { useFATTime = true; }
+        if (parts[i].ToLower() == "/mir") { IsMirror = true; }
+        if (parts[i].ToLower() == "/mov") { IsMove = true; }
+        if (parts[i].ToLower() == "/xo") { IsOnlyIfNewer = true; }
+        if (parts[i].ToLower() == "/fft") { IsUseFATTime = true; }
         if (parts[i].ToLower().StartsWith("/mt"))
         {
           MultiThreadCount = int.Parse(parts[i].Split(":")[1]);
@@ -170,9 +170,9 @@ namespace robocopy_gui.Classes
     {
       if (isArbitraryCommand)
       {
-        isArbitrary = isArbitraryCommand;
-        enabled = isEnabled;
-        arbitraryCommand = command;
+        IsArbitrary = isArbitraryCommand;
+        IsEnabled = isEnabled;
+        Command = command;
         Name = string.Empty;
         SourceFolder = string.Empty;
         DestinationFolder = string.Empty;
@@ -186,12 +186,12 @@ namespace robocopy_gui.Classes
       }
     }
 
-    public string Command()
+    public string GetCommand()
     {
-      if (!isArbitrary)
+      if (!IsArbitrary)
       {
         string command = "";
-        if (enabled)
+        if (IsEnabled)
         {
           command += "robocopy";
         }
@@ -201,7 +201,7 @@ namespace robocopy_gui.Classes
         }
         command += " \"" + SourceFolder + "\"";
         command += " \"" + DestinationFolder + "\"";
-        if (mirror && !move)
+        if (IsMirror && !IsMove)
         {
           command += " /mir";
         }
@@ -209,15 +209,15 @@ namespace robocopy_gui.Classes
         {
           command += " /e /xx";
         }
-        if (move)
+        if (IsMove)
         {
           command += " /mov";
         }
-        if (onlyIfNewer)
+        if (IsOnlyIfNewer)
         {
           command += " /xo";
         }
-        if (useFATTime)
+        if (IsUseFATTime)
         {
           command += " /fft";
         }
@@ -242,13 +242,13 @@ namespace robocopy_gui.Classes
       }
       else // is arbitrary command
       {
-        if (enabled)
+        if (IsEnabled)
         {
-          return arbitraryCommand;
+          return Command;
         }
         else
         {
-          return "REM " + arbitraryCommand;
+          return "REM " + Command;
         }
       }
     }

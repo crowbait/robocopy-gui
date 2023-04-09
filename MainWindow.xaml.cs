@@ -32,7 +32,7 @@ namespace robocopy_gui
           InputFilePath.Text = lastFile;
           currentFile = lastFile;
           ButtonCommit.IsEnabled = true;
-          readFile();
+          ReadFile();
         }
       }
     }
@@ -50,14 +50,14 @@ namespace robocopy_gui
         InputFilePath.Text = currentFile;
         if (File.Exists(fileName))
         {
-          readFile();
+          ReadFile();
         }
         else
         {
           File.CreateText(fileName).Dispose();
           //show operations group with empty list to allow adding of new operations
-          clearOperationsList();
-          renderList();
+          ClearOperationsList();
+          RenderList();
         }
         ButtonCommit.IsEnabled = true;
       }
@@ -71,7 +71,7 @@ namespace robocopy_gui
         if (File.Exists(fileName))
         {
           currentFile = fileName;
-          readFile();
+          ReadFile();
           ButtonCommit.IsEnabled = true;
         }
         else
@@ -84,8 +84,8 @@ namespace robocopy_gui
             File.CreateText(fileName).Dispose();
             currentFile = fileName;
             //show operations group with empty list to allow adding of new operations
-            clearOperationsList();
-            renderList();
+            ClearOperationsList();
+            RenderList();
             ButtonCommit.IsEnabled = true;
           }
           else
@@ -109,7 +109,7 @@ namespace robocopy_gui
       InputFilePath.Text = currentFile;
       if (File.Exists(fileName))
       {
-        readFile();
+        ReadFile();
         ButtonCommit.IsEnabled = true;
       }
     }
@@ -187,13 +187,13 @@ namespace robocopy_gui
     {
       TextBox s = sender as TextBox ?? throw new Exception("Sender is null");
       int index = Convert.ToInt32(s.Tag);
-      OperationsList[index].arbitraryCommand = s.Text;
+      OperationsList[index].Command = s.Text;
     }
     private void OperationCheckMirror_enable(object sender, RoutedEventArgs e)
     {
       CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
       int index = Convert.ToInt32(s.Tag);
-      OperationsList[index].mirror = true;
+      OperationsList[index].IsMirror = true;
       CheckBox move = GridOperations.FindName("move" + index) as CheckBox ?? throw new Exception("Couldn't find appropriate CheckBox");
       move.IsChecked = false;
     }
@@ -201,7 +201,7 @@ namespace robocopy_gui
     {
       CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
       int index = Convert.ToInt32(s.Tag);
-      OperationsList[index].move = true;
+      OperationsList[index].IsMove = true;
       CheckBox mirror = GridOperations.FindName("mirror" + index) as CheckBox ?? throw new Exception("Couldn't find appropriate CheckBox");
       mirror.IsChecked = false;
     }
@@ -209,7 +209,7 @@ namespace robocopy_gui
     {
       CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
       int index = Convert.ToInt32(s.Tag);
-      OperationsList[index].onlyIfNewer = true;
+      OperationsList[index].IsOnlyIfNewer = true;
       CheckBox fatFileTime = GridOperations.FindName("FATtime" + index) as CheckBox ?? throw new Exception("Couldn't find appropriate CheckBox");
       fatFileTime.IsChecked = true;
     }
@@ -221,7 +221,7 @@ namespace robocopy_gui
      */
 
 
-    private void clearOperationsList()
+    private void ClearOperationsList()
     {
       OperationsList.Clear();
       foreach (string item in registeredNames)
@@ -241,9 +241,9 @@ namespace robocopy_gui
       GridOperations.RowDefinitions.Clear();
     }
 
-    private void readFile()
+    private void ReadFile()
     {
-      clearOperationsList();
+      ClearOperationsList();
 
       //read lines in file
       List<string> operationStrings = new List<string>();
@@ -295,7 +295,7 @@ namespace robocopy_gui
       {
         CheckStartup.IsChecked = false;
       }
-      renderList();
+      RenderList();
     }
     private void AddOperationRow(Operation operation, int operationIndex)
     {
@@ -303,7 +303,7 @@ namespace robocopy_gui
       newRow.Height = new GridLength(42);
       GridOperations.RowDefinitions.Add(newRow);
 
-      if (!operation.isArbitrary)
+      if (!operation.IsArbitrary)
       {
         UIOperationRobocopy row = new UIOperationRobocopy(operationIndex);
         row.SearchSourceButton.Click += OperationButtonSearchSource_Click;
@@ -362,18 +362,18 @@ namespace robocopy_gui
       {
         UIOperationArbitrary row = new UIOperationArbitrary(operationIndex);
         row.Command.LostFocus += OperationTextBoxCommand_LostFocus;
-        Grid.SetColumn(row.label, 1);
-        Grid.SetRow(row.label, operationIndex);
+        Grid.SetColumn(row.Label, 1);
+        Grid.SetRow(row.Label, operationIndex);
         Grid.SetColumn(row.Command, 2);
         Grid.SetColumnSpan(row.Command, 9);
         Grid.SetRow(row.Command, operationIndex);
-        GridOperations.Children.Add(row.label);
+        GridOperations.Children.Add(row.Label);
         GridOperations.Children.Add(row.Command);
       }
 
       CheckBox enabled = new CheckBox();
       enabled.Content = "Enabled";
-      enabled.IsChecked = operation.enabled;
+      enabled.IsChecked = operation.IsEnabled;
       enabled.HorizontalAlignment = HorizontalAlignment.Center;
       enabled.VerticalAlignment = VerticalAlignment.Center;
       enabled.Tag = operationIndex;
@@ -381,13 +381,13 @@ namespace robocopy_gui
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
         int index = Convert.ToInt32(s.Tag);
-        OperationsList[index].enabled = true;
+        OperationsList[index].IsEnabled = true;
       };
       enabled.Unchecked += (sender, e) =>
       {
         CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
         int index = Convert.ToInt32(s.Tag);
-        OperationsList[index].enabled = false;
+        OperationsList[index].IsEnabled = false;
       };
       Grid.SetColumn(enabled, 0);
       Grid.SetRow(enabled, operationIndex);
@@ -429,7 +429,7 @@ namespace robocopy_gui
       GridOperations.Children.Add(enabled);
       GridOperations.Children.Add(remove);
     }
-    public void renderList()
+    public void RenderList()
     {
       int operationIndex = 0;
       foreach (Operation operation in OperationsList)
@@ -507,19 +507,19 @@ namespace robocopy_gui
 
       foreach (Operation item in OperationsList)
       {
-        if ((item.isArbitrary && !string.IsNullOrWhiteSpace(item.arbitraryCommand)) ||
+        if ((item.IsArbitrary && !string.IsNullOrWhiteSpace(item.Command)) ||
           (!string.IsNullOrWhiteSpace(item.SourceFolder) && !string.IsNullOrWhiteSpace(item.DestinationFolder)))
         {
           file.WriteLine();
-          if (!item.enabled)
+          if (!item.IsEnabled)
           {
             file.Write("REM ");
           }
-          if (!item.isArbitrary)
+          if (!item.IsArbitrary)
           {
             file.WriteLine("echo " + item.Name);
           }
-          file.WriteLine(item.Command());
+          file.WriteLine(item.GetCommand());
         }
       }
       file.Close();
