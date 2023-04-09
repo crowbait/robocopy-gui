@@ -23,14 +23,16 @@
 
 ## Installation
 
+Grab your executable from the [release page](https://github.com/crowbait/robocopy-gui).
+
 There are 2 versions published:
 - framework-dependent: requires .NET-Framework 7.0 to be installed, but is a much smaller executable
 - self-contained: does not have outside dependencies, but is much larger
 
-Both assembly types are build for x64 Windows
+Both assembly types are build for x64 Windows.
 
 ## To-do
 
-- migrate to UWP or WinUI 3
+- migrate to UWP or WinUI 3 to enable the following features:
   - drag-and-drop reordering of operations
   - visual grouping of operations for a less convoluted interface
