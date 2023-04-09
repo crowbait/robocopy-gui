@@ -3,7 +3,6 @@
 #### Windows GUI for generating and managing robocopy-based .bat-scripts for backup and automation purposes 
 
 
-### To-Do
+## To-do
 
-- don't re-render entire list on operation add
-- add file to windows startup tasks
+- visual grouping of operations for a less convoluted interface

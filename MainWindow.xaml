@@ -54,12 +54,14 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="170" />
       </Grid.ColumnDefinitions>
 
       <Label Content="Script Title:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Grid.Column="0"/>
-      <TextBox x:Name="InputScriptTitle" Margin="5,10,0,0" Grid.Column="1" TextWrapping="NoWrap" VerticalAlignment="Top" LostFocus="InputScriptTitle_LostFocus" KeyDown="InputScriptTitle_KeyDown" />
-      <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Column="3" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
+      <TextBox x:Name="InputScriptTitle" Margin="5,10,10,0" Grid.Column="1" TextWrapping="NoWrap" VerticalAlignment="Top" LostFocus="InputScriptTitle_LostFocus" KeyDown="InputScriptTitle_KeyDown" />
+      <CheckBox x:Name="CheckStartup" Grid.Column="2" Content="Run on startup" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked" />
+      <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Column="4" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
     </Grid>
   </Grid>
 </Window>

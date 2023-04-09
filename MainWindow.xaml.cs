@@ -3,7 +3,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using robocopy_gui.Classes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -125,6 +124,15 @@ namespace robocopy_gui
         InputScriptTitle_LostFocus(sender, e);
       }
     }
+    private void CheckStartup_Checked(object sender, RoutedEventArgs e)
+    {
+      new StartupTask(currentFile, scriptTitle).Register();
+    }
+
+    private void CheckStartup_Unchecked(object sender, RoutedEventArgs e)
+    {
+      new StartupTask(currentFile, scriptTitle).Unregister();
+    }
 
     /*                      ROUTINES FOR GENERATED OPERATION ROW UI ELEMENTS
      * ===============================================================================
@@ -229,11 +237,13 @@ namespace robocopy_gui
           control.LostFocus -= OperationTextBoxDest_LostFocus;
         }
       }
+      GridOperations.Children.Clear();
+      GridOperations.RowDefinitions.Clear();
     }
 
     private void readFile()
     {
-      OperationsList.Clear();
+      clearOperationsList();
 
       //read lines in file
       List<string> operationStrings = new List<string>();
@@ -245,7 +255,7 @@ namespace robocopy_gui
           reader.ReadLine();
         }
         while (!reader.EndOfStream)
-        { 
+        {
           var readLine = reader.ReadLine();
           if (readLine != null && !string.IsNullOrWhiteSpace(readLine))
           {
@@ -258,27 +268,36 @@ namespace robocopy_gui
       //interpret all read lines as operations
       foreach (string operation in operationStrings)
       {
-        if(operation.ToLower().StartsWith("robocopy") || operation.ToLower().StartsWith("rem robocopy") ) {
+        if (operation.ToLower().StartsWith("robocopy") || operation.ToLower().StartsWith("rem robocopy"))
+        {
           OperationsList.Add(new Operation(operation));
         }
         else if (operation.ToLower().StartsWith("title "))
         {
           scriptTitle = operation.Substring(6);
-          InputScriptTitle.Text = scriptTitle;
         }
-        else if(operation.ToLower().StartsWith("rem ") && !operation.ToLower().StartsWith("rem echo") )
+        else if (operation.ToLower().StartsWith("rem ") && !operation.ToLower().StartsWith("rem echo"))
         {
           OperationsList.Add(new Operation(true, false, operation.Substring(3)));
-        } else if (!operation.ToLower().StartsWith("echo"))
+        }
+        else if (!operation.ToLower().StartsWith("echo"))
         {
           OperationsList.Add(new Operation(true, true, operation));
-        } 
+        }
       }
+      InputScriptTitle.Text = scriptTitle;
 
-      //display rows of operations
+      if (new StartupTask(currentFile, scriptTitle).CheckRegistration())
+      {
+        CheckStartup.IsChecked = true;
+      }
+      else
+      {
+        CheckStartup.IsChecked = false;
+      }
       renderList();
     }
-    private void AddOperationRow (Operation operation, int operationIndex)
+    private void AddOperationRow(Operation operation, int operationIndex)
     {
       RowDefinition newRow = new RowDefinition();
       newRow.Height = new GridLength(42);
@@ -412,15 +431,6 @@ namespace robocopy_gui
     }
     public void renderList()
     {
-      GridOperations.RowDefinitions.Clear();
-      GridOperations.Children.Clear();
-
-      foreach (string item in registeredNames)
-      {
-        GridOperations.UnregisterName(item);
-      }
-      registeredNames.Clear();
-
       int operationIndex = 0;
       foreach (Operation operation in OperationsList)
       {
@@ -474,22 +484,15 @@ namespace robocopy_gui
       GridOperations.Children.Add(addArbitrary);
       GridOperations.RegisterName(add.Name, add);
       GridOperations.RegisterName(addArbitrary.Name, addArbitrary);
+      registeredNames.Add(add.Name);
       registeredNames.Add(addArbitrary.Name);
       GroupOperations.Visibility = Visibility.Visible;
-    }
-
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-      Properties.Settings.Default.MainWindowWidth = MainWindow1.Width;
-      Properties.Settings.Default.MainWindowHeight = MainWindow1.Height;
-      Properties.Settings.Default.LastFile = currentFile;
-      Properties.Settings.Default.Save();
     }
 
     private void ButtonCommit_Click(object sender, RoutedEventArgs e)
     {
       // MessageBox.Show("Inspect!");  // set breakpoint here for convenient variable inspection
-      
+
       StreamWriter file;
       if (!File.Exists(currentFile))
       {
@@ -504,22 +507,30 @@ namespace robocopy_gui
 
       foreach (Operation item in OperationsList)
       {
-        if ( (item.isArbitrary && !string.IsNullOrWhiteSpace(item.arbitraryCommand) ) ||
-          ( !string.IsNullOrWhiteSpace(item.SourceFolder) && !string.IsNullOrWhiteSpace(item.DestinationFolder) ) )
+        if ((item.isArbitrary && !string.IsNullOrWhiteSpace(item.arbitraryCommand)) ||
+          (!string.IsNullOrWhiteSpace(item.SourceFolder) && !string.IsNullOrWhiteSpace(item.DestinationFolder)))
         {
           file.WriteLine();
           if (!item.enabled)
           {
             file.Write("REM ");
           }
-          if(!item.isArbitrary)
+          if (!item.isArbitrary)
           {
             file.WriteLine("echo " + item.Name);
-          }          
+          }
           file.WriteLine(item.Command());
         }
       }
       file.Close();
+    }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      Properties.Settings.Default.MainWindowWidth = MainWindow1.Width;
+      Properties.Settings.Default.MainWindowHeight = MainWindow1.Height;
+      Properties.Settings.Default.LastFile = currentFile;
+      Properties.Settings.Default.Save();
     }
   }
 }
