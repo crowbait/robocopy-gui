@@ -15,7 +15,7 @@ namespace robocopy_gui
   public partial class MainWindow : Window
   {
     public static List<Operation> OperationsList { get; set; } = new List<Operation>();
-    private List<string> registeredNames = new List<string>();
+    private readonly List<string> registeredNames = new List<string>();
     private string currentFile = "";
     private string scriptTitle = "Backup";
 

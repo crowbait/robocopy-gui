@@ -13,5 +13,8 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.cs]
-# Suppress 'new-expression can be simplified because fully-qualified new()'s make for more intuitive code
+# Suppress 'new-expression can be simplified' because fully-qualified new()'s make for more intuitive code
 dotnet_diagnostic.IDE0090.severity=silent
+# Suppress 'use index operator (^)' and 'use substring operator (..)' because they make the code less readable / intuitive
+dotnet_diagnostic.IDE0056.severity=silent
+dotnet_diagnostic.IDE0057.severity=silent
