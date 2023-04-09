@@ -11,7 +11,7 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="Robocopy GUI" Height="600" Width="1020" Closing="Window_Closing">
+        Title="Robocopy GUI" Height="600" Width="1280" Closing="Window_Closing">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />

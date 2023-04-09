@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1020</Value>
+      <Value Profile="(Default)">1280</Value>
     </Setting>
     <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">600</Value>
