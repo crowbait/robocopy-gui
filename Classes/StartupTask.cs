@@ -64,13 +64,9 @@ namespace robocopy_gui.Classes
     public void Unregister()
     {
       RegistryKey key = Registry.CurrentUser.OpenSubKey(startupKey, RegistryKeyPermissionCheck.ReadWriteSubTree) ?? throw new ArgumentException("HKEY_CURRENT_USER run key does not exist");
-      foreach (string valueName in key.GetValueNames())
+      if(key?.GetValue(Name)?.ToString() == Path)
       {
-        if(key?.GetValue(Name)?.ToString() == Path)
-        {
-          key?.DeleteValue(Name);
-          break;
-        }
+        key?.DeleteValue(Name);
       }
     }
   }
