@@ -32,6 +32,10 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 
 - settings dialog per operation
   - move less important checkboxes (only newer, FAT file time)
+  - /zb [(Restartable/Backup Mode)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)
+  - /create (creates only folder structure)
+  - [logging options](https://stackoverflow.com/questions/3898127/how-can-i-make-robocopy-silent-in-the-command-line-except-for-progress)
+  - turn off logging alltogether (see above, pipe `> NUL`
   - options to set retry count and multithreading
 
 #### Delayed indefinitely
