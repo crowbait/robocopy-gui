@@ -1,59 +1,43 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
     <OutputType>WinExe</OutputType>
-    <OutputPath>bin\</OutputPath>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <RootNamespace>robocopy_gui</RootNamespace>
+    <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <PublishSingleFile>true</PublishSingleFile>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!--Single exe output-->
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <StartupObject>robocopy_gui.App</StartupObject>
-    <AssemblyVersion>1.0.1</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <IsPublishable>True</IsPublishable>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-    <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Content Include="Assets\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
-    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+    <PackageReference Include="Avalonia" Version="0.10.19" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.19" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.19" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
+    <Compile Update="UI\DialogMessage.axaml.cs">
+      <DependentUpon>DialogMessage.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <Folder Include="Classes\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Include="App.xaml" />
-  </ItemGroup>
-
 </Project>

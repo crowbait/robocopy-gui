@@ -1,8 +1,11 @@
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Microsoft.Win32;
+using robocopy_gui.UI;
 using System;
-using System.Windows;
+using System.Threading.Tasks;
 
-namespace robocopy_gui.Classes
+namespace robocopy_gui
 {
   internal class StartupTask
   {
@@ -35,7 +38,7 @@ namespace robocopy_gui.Classes
       }
       return false; //Name is not present in key's values
     }
-    public void Register()
+    public async Task<bool> Register()
     {
       RegistryKey key = Registry.CurrentUser.OpenSubKey(startupKey, RegistryKeyPermissionCheck.ReadWriteSubTree) ?? throw new ArgumentException("HKEY_CURRENT_USER run key does not exist");
       foreach (string valueName in key.GetValueNames())
@@ -44,21 +47,28 @@ namespace robocopy_gui.Classes
         {
           if(key?.GetValue(Name)?.ToString() != Path)
           {
-            if(MessageBox.Show(
+            DialogMessage message = new DialogMessage(
               Name + " is already set to startup with path '" + key?.GetValue(Name)?.ToString() + "'.\nOverwrite?",
-              "Name conflict!",
-              MessageBoxButton.YesNo) == MessageBoxResult.Yes )
+              "Name conflict!"
+            );
+            message.SetButtons(new string[] { "Yes", "No" });
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+              await message.ShowDialog(desktop.MainWindow);
+            }
+            if(message.ReturnValue == "Yes")
             {
               break;
             } else
             {
-              return; //User does not want to overwrite existing startup key
+              return false; //User does not want to overwrite existing startup key
             }
           }
-          return; //Name is already set with correct Path
+          return true; //Name is already set with correct Path
         }
       }
       key?.SetValue(Name, Path, RegistryValueKind.String);
+      return true;
     }
 
     public void Unregister()

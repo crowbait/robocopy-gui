@@ -1,0 +1,9 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="robocopy_gui.App">
+
+  <Application.Styles>
+    <FluentTheme Mode="Dark"/>
+    <StyleInclude Source="avares://robocopy-gui/UI/Icons.axaml" />
+  </Application.Styles>
+</Application>

@@ -25,17 +25,21 @@
 
 Grab your executable from the [release page](https://github.com/crowbait/robocopy-gui/releases).
 
-There are 2 versions published:
-- framework-dependent: requires .NET-Framework 7.0 to be installed, but is a much smaller executable
-- self-contained: does not have outside dependencies, but is much larger
-
-Both assembly types are build for x64 Windows.
+Binaries are built for x64 Windows.
+Important: the program is targeting Windows 10.0.18362 and *might or might not* work on older versions. Theoretically, it should work down to Windows 7.
 
 ## To-do
 
-- migrate to UWP or WinUI 3 to enable the following features:
-  - drag-and-drop reordering of operations
-  - visual grouping of operations for a less convoluted interface
 - settings dialog per operation
   - move less important checkboxes (only newer, FAT file time)
   - options to set retry count and multithreading
+
+#### Delayed indefinitely
+These items seem either impossible or at least unfeasible. Further research might be required and ideas on tackling these problems have not been successful so far.
+- drag-and-drop reordering of operations
+- visual grouping of operations
+
+## Development
+
+- development using Visual Studio 2022 is recommended
+- installation of [AvaloniaUI extension](https://avaloniaui.net/GettingStarted#installation) is recommended

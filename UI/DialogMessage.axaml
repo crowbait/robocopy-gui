@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
+        x:Class="robocopy_gui.UI.DialogMessage"
+        x:Name="MessageWindow"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        SystemDecorations="BorderOnly" ExtendClientAreaChromeHints="NoChrome" CanResize="False" SizeToContent="WidthAndHeight"
+        Title="Message" Width="300" Height="150" Topmost="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+          BackgroundSource="Digger"
+          TintColor="Red"
+          TintOpacity="0.5"
+          MaterialOpacity="0.5" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <Grid Margin="10,5,10,10" x:Name="GridContent">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="24" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="48" />
+      </Grid.RowDefinitions>
+
+      <Label x:Name="TitleLabel" Grid.Row="0" Content="Robocopy GUI" Margin="0,0,0,0" FontStyle="Oblique" />
+      <TextBlock x:Name="TextBlock" Grid.Row="1" Margin="10,24,10,0" />
+      <Grid x:Name="GridButtons" Grid.Row="2">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+      </Grid>
+    </Grid>    
+  </Panel>
+</Window>

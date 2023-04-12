@@ -1,0 +1,77 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:robocopy_gui.UI;assembly=robocopy-gui"
+        x:Name="MainWindow1"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="600"
+        x:Class="robocopy_gui.MainWindow"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        Closing="Window_Closing"
+        Title="Robocopy GUI" WindowStartupLocation="CenterScreen">
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+          BackgroundSource="Digger"
+          TintColor="Black"
+          TintOpacity="1"
+          MaterialOpacity="0.5" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <Grid Margin="10,5,10,10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="24" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="48" />
+      </Grid.RowDefinitions>
+      <Label x:Name="TitleLabel" Grid.Row="0" Content="Robocopy GUI" Margin="0,0,0,0" FontStyle="Oblique" />
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="80" />
+          <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="InputFilePath" Watermark="File Path" Margin="10,10,0,0" TextWrapping="NoWrap" Grid.Column="0" VerticalAlignment="Top" KeyDown="InputFilePath_KeyDown" LostFocus="InputFilePath_LostFocus" />
+        <Button x:Name="ButtonPickFile" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Column="1" Width="60" HorizontalAlignment="Center" Click="ButtonPickFile_Click">
+          <PathIcon Data="{StaticResource search_regular}" />
+        </Button>
+        <Button x:Name="ButtonReloadFile" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Column="2" Width="60" HorizontalAlignment="Center" Click="ButtonReloadFile_Click">
+          <PathIcon Data="{StaticResource arrow_sync_regular}" />
+        </Button>
+      </Grid>
+      <ScrollViewer Grid.Row="2" Margin="10,10,10,10">
+        <Grid x:Name="GridOperations">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="80" />
+          </Grid.ColumnDefinitions>
+        </Grid>
+      </ScrollViewer>
+      <Grid Grid.Row="3">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="170" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="InputScriptTitle" Watermark="Script Title" Margin="10,10,10,0" Grid.Column="0" TextWrapping="NoWrap" VerticalAlignment="Top" LostFocus="InputScriptTitle_LostFocus" KeyDown="InputScriptTitle_KeyDown" />
+        <CheckBox x:Name="CheckStartup" Grid.Column="1" Content="Run on startup" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked" />
+        <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Column="2" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
+      </Grid>
+    </Grid>
+  </Panel>
+</Window>
