@@ -20,12 +20,15 @@
           MaterialOpacity="0.5" />
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
-    <Grid>
+    <Grid Margin="10,5,10,10">
       <Grid.RowDefinitions>
+        <RowDefinition Height="24" />
         <RowDefinition Height="*" />
         <RowDefinition Height="42" />
       </Grid.RowDefinitions>
-      <ScrollViewer Grid.Row="0">
+
+      <Label x:Name="TitleLabel" Grid.Row="0" Content="Exclusions" Margin="0,0,0,0" FontStyle="Oblique" />
+      <ScrollViewer Grid.Row="1">
         <Grid x:Name="GridExclusions">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -33,7 +36,7 @@
           </Grid.ColumnDefinitions>
         </Grid>
       </ScrollViewer>
-      <Grid Grid.Row="1">
+      <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="120" />
           <ColumnDefinition Width="*" />

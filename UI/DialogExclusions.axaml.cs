@@ -48,14 +48,17 @@ public partial class DialogExclusions : Window {
           Source = exclusions[index]
         },
         VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
-        Margin = new Thickness(10, 10, 0, 0),
+        Margin = new Thickness(10, 5, 0, 0),
         TextWrapping = TextWrapping.NoWrap
       };
       Grid.SetColumn(pattern, 0);
       Grid.SetRow(pattern, index);
 
+      PathIcon removeIcon = new PathIcon {
+        Data = Geometry.Parse(Icons.Delete)
+      };
       Button remove = new Button {
-        Content = "-",
+        Content = removeIcon,
         HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
         VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
         Width = 60,
@@ -80,8 +83,11 @@ public partial class DialogExclusions : Window {
     };
     GridExclusions.RowDefinitions.Add(addRow);
 
+    PathIcon addIcon = new PathIcon {
+      Data = Geometry.Parse(Icons.Add)
+    };
     Button add = new Button {
-      Content = "+",
+      Content = addIcon,
       HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
       VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
       Width = 60

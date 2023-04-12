@@ -1,7 +1,13 @@
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
-* text=auto
+*.md text eol=lf
+*.cs text eol=lf
+*.xaml text eol=lf
+*.axaml text eol=lf
+
+*.png -text
+*.ico -text
 
 ###############################################################################
 # Set default behavior for command prompt diff.
@@ -40,9 +46,9 @@
 #
 # image files are treated as binary by default.
 ###############################################################################
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
+*.jpg   binary
+*.png   binary
+*.gif   binary
 
 ###############################################################################
 # diff behavior for common document formats

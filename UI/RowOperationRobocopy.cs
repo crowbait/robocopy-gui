@@ -39,7 +39,7 @@ namespace robocopy_gui.UI {
         Watermark = "Source",
         Text = MainWindow.OperationsList[operationIndex].SourceFolder,
         VerticalAlignment = VerticalAlignment.Top,
-        Margin = new Thickness(10, 5, 0, 0),
+        Margin = new Thickness(0, 5, 0, 0),
         TextWrapping = TextWrapping.NoWrap,
         Tag = operationIndex
       };
@@ -60,7 +60,7 @@ namespace robocopy_gui.UI {
         Watermark = "Destination",
         Text = MainWindow.OperationsList[operationIndex].DestinationFolder,
         VerticalAlignment = VerticalAlignment.Top,
-        Margin = new Thickness(10, 5, 0, 0),
+        Margin = new Thickness(0, 5, 0, 0),
         TextWrapping = TextWrapping.NoWrap,
         Tag = operationIndex
       };
@@ -113,6 +113,7 @@ namespace robocopy_gui.UI {
         IsChecked = MainWindow.OperationsList[operationIndex].IsMirror,
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
+        Margin = new Thickness(0, 0, 5, 0),
         Tag = operationIndex
       };
       Mirror.SetValue(ToolTip.TipProperty,
@@ -129,6 +130,7 @@ namespace robocopy_gui.UI {
         IsChecked = MainWindow.OperationsList[operationIndex].IsMove,
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
+        Margin = new Thickness(0,0,5,0),
         Tag = operationIndex
       };
       Move.SetValue(ToolTip.TipProperty,
@@ -144,6 +146,7 @@ namespace robocopy_gui.UI {
         IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer,
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
+        Margin = new Thickness(0, 0, 5, 0),
         Tag = operationIndex
       };
       OnlyNewer.SetValue(ToolTip.TipProperty,
