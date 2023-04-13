@@ -42,8 +42,8 @@
           <ColumnDefinition Width="*" />
           <ColumnDefinition Width="120" />
         </Grid.ColumnDefinitions>
-        <Button x:Name="ButtonExclusionsCancel" Content="Cancel" VerticalAlignment="Center" Grid.Column="0" Width="100" HorizontalAlignment="Left" Margin="10,0,0,0" Background="#FF7B7B7B" BorderBrush="#FF5F5F5F" Click="ButtonExclusionsCancel_Click" />
-        <Button x:Name="ButtonExclusionsOK" Content="Done" VerticalAlignment="Center" Grid.Column="3" Width="100" HorizontalAlignment="Left" Margin="10,0,0,0" Click="ButtonExclusionsOK_Click" IsDefault="True" />
+        <Button x:Name="ButtonExclusionsCancel" Content="Cancel" VerticalAlignment="Center" Grid.Column="0" Width="100" HorizontalAlignment="Left" Margin="10,0,0,0" Click="ButtonExclusionsCancel_Click" />
+        <Button x:Name="ButtonExclusionsOK" Content="Done" VerticalAlignment="Center" Grid.Column="2" Width="100" HorizontalAlignment="Left" Margin="10,0,0,0" Click="ButtonExclusionsOK_Click" IsDefault="True" />
       </Grid>
     </Grid>
   </Panel>

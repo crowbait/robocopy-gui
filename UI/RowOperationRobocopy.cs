@@ -4,7 +4,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Media;
 using System;
-using System.Linq;
 
 namespace robocopy_gui.UI {
   internal class RowOperationRobocopy {
@@ -17,8 +16,7 @@ namespace robocopy_gui.UI {
     public Button ExclFoldersButton { get; set; }
     public CheckBox Mirror { get; set; }
     public CheckBox Move { get; set; }
-    public CheckBox OnlyNewer { get; set; }
-    public CheckBox FATFileTime { get; set; }
+    public Button SettingsButton { get; set; }
 
     public RowOperationRobocopy(int operationIndex) {
       Index = operationIndex;
@@ -141,41 +139,29 @@ namespace robocopy_gui.UI {
         MainWindow.OperationsList[index].IsMove = false;
       };
 
-      OnlyNewer = new CheckBox {
-        Content = "Only newer",
-        IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer,
+      PathIcon settingsIcon = new PathIcon {
+        Data = Geometry.Parse(Icons.Settings)
+      };
+      SettingsButton = new Button {
+        Content = settingsIcon,
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
-        Margin = new Thickness(0, 0, 5, 0),
+        Width = 60,
         Tag = operationIndex
       };
-      OnlyNewer.SetValue(ToolTip.TipProperty,
-        "Copy or move files to the destination folder only if the source file is newer than the target file.");
-      OnlyNewer.Unchecked += (sender, e) => {
-        CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
-        int index = Convert.ToInt32(s.Tag);
-        MainWindow.OperationsList[index].IsOnlyIfNewer = false;
-      };
-
-      FATFileTime = new CheckBox {
-        Name = "FATtime",
-        Content = "FAT-Time",
-        IsChecked = MainWindow.OperationsList[operationIndex].IsOnlyIfNewer,
-        HorizontalAlignment = HorizontalAlignment.Center,
-        VerticalAlignment = VerticalAlignment.Center,
-        Tag = operationIndex
-      };
-      FATFileTime.SetValue(ToolTip.TipProperty,
-        "Use FAT-style time format when writing file. Useful when copying to another file system and when using \"only newer files\".");
-      FATFileTime.Checked += (sender, e) => {
-        CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
-        int index = Convert.ToInt32(s.Tag);
-        MainWindow.OperationsList[index].IsUseFATTime = true;
-      };
-      FATFileTime.Unchecked += (sender, e) => {
-        CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
-        int index = Convert.ToInt32(s.Tag);
-        MainWindow.OperationsList[index].IsUseFATTime = false;
+      SettingsButton.Click += async (s, e) => {
+        Button sender = s as Button ?? throw new Exception("Sender is null");
+        int index = Convert.ToInt32(sender.Tag);
+        DialogRobocopySettings dialog = new DialogRobocopySettings(MainWindow.OperationsList[index]);
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+          await dialog.ShowDialog(desktop.MainWindow);
+        }
+        if (!dialog.IsCancel) {
+          MainWindow.OperationsList[index].IsOnlyIfNewer = dialog.OnlyNewer;
+          MainWindow.OperationsList[index].IsUseFATTime = dialog.FATTime;
+          MainWindow.OperationsList[index].RetryCount = dialog.RetryCount;
+          MainWindow.OperationsList[index].MultiThreadCount = dialog.MultiThread;
+        }
       };
     }
   }

@@ -1,0 +1,72 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="robocopy_gui.UI.DialogRobocopySettings"
+        x:Name="RobocopySettingsWindow"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        SystemDecorations="BorderOnly" ExtendClientAreaChromeHints="NoChrome" CanResize="False" Design.Width="400" Design.Height="500"
+        Title="Settings" Width="400" Height="500" Topmost="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+          BackgroundSource="Digger"
+          TintColor="Black"
+          TintOpacity="1"
+          MaterialOpacity="0.5" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <Grid Margin="10,5,10,10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="24" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="42" />
+      </Grid.RowDefinitions>
+
+      <Label x:Name="TitleLabel" Grid.Row="0" Content="Settings" Margin="0,0,0,0" FontStyle="Oblique" />
+      <ScrollViewer Grid.Row="1" Margin="10,0">
+        <Grid x:Name="GridSettings">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="42" />
+            <RowDefinition Height="42" />
+            <RowDefinition Height="42" />
+            <RowDefinition Height="42" />
+          </Grid.RowDefinitions>
+          <CheckBox x:Name="CheckOnlyNewer" Content="Only newer Files" Grid.Row="0"
+            ToolTip.Tip="Copy or move files to the destination folder only if the source file is newer than the target file." />
+          <CheckBox x:Name="CheckFAT" Content="FAT-Time" Grid.Row="1"
+            ToolTip.Tip="Use FAT-style time format when writing file. Useful when copying to another file system and when using &quot;only newer files&quot;." />
+          <Grid Grid.Row="2" ToolTip.Tip="Define how many times robocopy should try to copy files after it fails once. Default: 0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Retry Count" Grid.Column="0" Margin="0,7,0,0" />
+            <NumericUpDown x:Name="NumericRetryCount" Value="0" Grid.Column="1" Width="120" Height="32" Minimum="0" Maximum="20" />
+          </Grid>
+          <Grid Grid.Row="3" ToolTip.Tip="Define how many files can be copied in parallel. Default: 3">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Multi-threading" Grid.Column="0" Margin="0,7,0,0" />
+            <NumericUpDown x:Name="NumericMultiThread" Value="3" Grid.Column="1" Width="120" Height="32" Minimum="1" Maximum="20" />
+          </Grid>
+        </Grid>
+      </ScrollViewer>
+      <Grid Grid.Row="2">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="120" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="120" />
+        </Grid.ColumnDefinitions>
+        <Button x:Name="ButtonCancel" Content="Cancel" VerticalAlignment="Center" Grid.Column="0" Width="100" HorizontalAlignment="Left" Margin="10,0,0,0" Click="ButtonCancel_Click" />
+        <Button x:Name="ButtonOK" Content="Done" VerticalAlignment="Center" Grid.Column="2" Width="100" HorizontalAlignment="Left" Margin="10,0,0,0" IsDefault="True" Click="ButtonDone_Click" />
+      </Grid>
+    </Grid>
+  </Panel>
+</Window>

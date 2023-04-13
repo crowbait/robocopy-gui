@@ -250,16 +250,6 @@ public partial class MainWindow : Window {
       }
     }
   }
-  private void OperationCheckOnlyNewer_enable(object? sender, RoutedEventArgs e) {
-    CheckBox s = sender as CheckBox ?? throw new Exception("Sender is null");
-    int index = Convert.ToInt32(s.Tag);
-    OperationsList[index].IsOnlyIfNewer = true;
-    foreach (Control control in GridOperations.Children) {
-      if (control.Name == "FATtime" && Convert.ToInt32(control.Tag) == index) {
-        ((CheckBox)control).IsChecked = true;
-      }
-    }
-  }
 
 
 
@@ -338,7 +328,6 @@ public partial class MainWindow : Window {
       row.DestText.LostFocus += OperationTextBoxDest_LostFocus;
       row.Mirror.Checked += OperationCheckMirror_enable;
       row.Move.Checked += OperationCheckMove_enable;
-      row.OnlyNewer.Checked += OperationCheckOnlyNewer_enable;
 
       Grid.SetColumn(row.SearchSourceButton, 1);
       Grid.SetRow(row.SearchSourceButton, operationIndex);
@@ -356,10 +345,8 @@ public partial class MainWindow : Window {
       Grid.SetRow(row.Mirror, operationIndex);
       Grid.SetColumn(row.Move, 8);
       Grid.SetRow(row.Move, operationIndex);
-      Grid.SetColumn(row.OnlyNewer, 9);
-      Grid.SetRow(row.OnlyNewer, operationIndex);
-      Grid.SetColumn(row.FATFileTime, 10);
-      Grid.SetRow(row.FATFileTime, operationIndex);
+      Grid.SetColumn(row.SettingsButton, 9);
+      Grid.SetRow(row.SettingsButton, operationIndex);
 
       GridOperations.Children.Add(row.SearchSourceButton);
       GridOperations.Children.Add(row.SourceText);
@@ -369,8 +356,7 @@ public partial class MainWindow : Window {
       GridOperations.Children.Add(row.ExclFoldersButton);
       GridOperations.Children.Add(row.Mirror);
       GridOperations.Children.Add(row.Move);
-      GridOperations.Children.Add(row.OnlyNewer);
-      GridOperations.Children.Add(row.FATFileTime);
+      GridOperations.Children.Add(row.SettingsButton);
     } else {
       RowOperationArbitrary row = new RowOperationArbitrary(operationIndex);
       row.Command.LostFocus += OperationTextBoxCommand_LostFocus;
