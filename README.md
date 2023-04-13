@@ -33,7 +33,7 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 #### Create your first backup script
 
 - generate your file
-  - either create a new file, name it `somehting.bat` and point the program to it by using the "Search"-button at the top
+  - either create a new file, name it `something.bat` and point the program to it by using the "Search"-button at the top
   - or type any path, even to non-existent files, into the field at the top
 - add operations
   - select the folder you want to back up (the source) and the folder which should contain the backed-up files (the destination) by either using the "Search"-buttons or typing the paths
