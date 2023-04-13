@@ -4,7 +4,7 @@
 
 # robocopy-gui
 
-##### Windows GUI for generating and managing robocopy-based .bat-scripts for backup and automation purposes 
+#### Windows GUI for managing robocopy-based .bat-scripts for backup purposes 
 
 <div align="center">
   <img src="Assets/main-interface.png" width="75%" stlye="padding: 8px; float: left;" />
@@ -24,19 +24,36 @@
 ## Installation
 
 Grab your executable from the [release page](https://github.com/crowbait/robocopy-gui/releases).
+The program is portable (so it doesn't need to be installed) and carries it's dependencies. Settings however are stored on the local machine and are not portable.
 
 Binaries are built for x64 Windows.
 Important: the program is targeting Windows 10.0.18362 and *might or might not* work on older versions. Theoretically, it should work down to Windows 7.
+
+## First steps
+#### Create your first backup script
+
+- generate your file
+  - either create a new file, name it `somehting.bat` and point the program to it by using the "Search"-button at the top
+  - or type any path, even to non-existent files, into the field at the top
+- add operations
+  - select the folder you want to back up (the source) and the folder which should contain the backed-up files (the destination) by either using the "Search"-buttons or typing the paths
+  - exclude files & folders if you'd like
+  - if you don't know about settings, the standard should be well suited for backup needs
+    - if you'd like to keep files in the destination folder that are *not* present in the source anymore, uncheck "Mirror"
+- name your script
+- check "Run on Startup" if you'd like your script to run every time you log into Windows
+- Commit to File!
 
 ## To-do
 
 - settings dialog per operation
   - move less important checkboxes (only newer, FAT file time)
+  - options to set retry count and multithreading
   - /zb [(Restartable/Backup Mode)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)
   - /create (creates only folder structure)
   - [logging options](https://stackoverflow.com/questions/3898127/how-can-i-make-robocopy-silent-in-the-command-line-except-for-progress)
   - turn off logging alltogether (see above, pipe `> NUL`
-  - options to set retry count and multithreading
+- dialog for default settings of new operations, save to registry
 
 #### Delayed indefinitely
 These items seem either impossible or at least unfeasible. Further research might be required and ideas on tackling these problems have not been successful so far.

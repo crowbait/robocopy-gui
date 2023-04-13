@@ -69,8 +69,8 @@
         </Grid.ColumnDefinitions>
 
         <TextBox x:Name="InputScriptTitle" Watermark="Script Title" Margin="10,10,10,0" Grid.Column="0" TextWrapping="NoWrap" VerticalAlignment="Top" LostFocus="InputScriptTitle_LostFocus" KeyDown="InputScriptTitle_KeyDown" />
-        <CheckBox x:Name="CheckStartup" Grid.Column="1" Content="Run on startup" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked" />
-        <Button x:Name="ButtonCommit" Content="Commit to file" VerticalAlignment="Center" Grid.Column="2" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
+        <CheckBox x:Name="CheckStartup" Grid.Column="1" Content="Run on Startup" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked" />
+        <Button x:Name="ButtonCommit" Content="Commit to File" VerticalAlignment="Center" Grid.Column="2" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
       </Grid>
     </Grid>
   </Panel>
