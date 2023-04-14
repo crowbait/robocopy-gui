@@ -47,9 +47,6 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 
 ## To-do
 
-- settings dialog per operation
-  - move less important checkboxes (only newer, FAT file time)
-  - options to set retry count and multithreading
 - move grid column assignments to row classes
 - new setting
   - /zb [(Restartable/Backup Mode)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)
