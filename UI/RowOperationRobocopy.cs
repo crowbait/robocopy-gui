@@ -31,6 +31,7 @@ namespace robocopy_gui.UI {
         Width = 60,
         Tag = operationIndex
       };
+      Grid.SetColumn(SearchSourceButton, 1);
 
       SourceText = new TextBox {
         Name = "source",
@@ -41,6 +42,7 @@ namespace robocopy_gui.UI {
         TextWrapping = TextWrapping.NoWrap,
         Tag = operationIndex
       };
+      Grid.SetColumn(SourceText, 2);
 
       PathIcon searchDestIcon = new PathIcon {
         Data = Geometry.Parse(Icons.Search)
@@ -52,6 +54,7 @@ namespace robocopy_gui.UI {
         Width = 60,
         Tag = operationIndex
       };
+      Grid.SetColumn(SearchDestButton, 3);
 
       DestText = new TextBox {
         Name = "dest",
@@ -62,6 +65,7 @@ namespace robocopy_gui.UI {
         TextWrapping = TextWrapping.NoWrap,
         Tag = operationIndex
       };
+      Grid.SetColumn(DestText, 4);
 
       ExclFilesButton = new Button {
         Content = "Exclude\nFiles: " + MainWindow.OperationsList[operationIndex].ExcludeFiles.Count,
@@ -83,6 +87,7 @@ namespace robocopy_gui.UI {
           sender.Content = "Exclude\nFiles: " + dialog.ReturnExclusions.Count;
         }
       };
+      Grid.SetColumn(ExclFilesButton, 5);
 
       ExclFoldersButton = new Button {
         Content = "Exclude\nFolders: " + MainWindow.OperationsList[operationIndex].ExcludeFolders.Count,
@@ -104,6 +109,7 @@ namespace robocopy_gui.UI {
           sender.Content = "Exclude\nFiles: " + dialog.ReturnExclusions.Count;
         }
       };
+      Grid.SetColumn(ExclFoldersButton, 6);
 
       Mirror = new CheckBox {
         Name = "mirror",
@@ -121,6 +127,7 @@ namespace robocopy_gui.UI {
         int index = Convert.ToInt32(s.Tag);
         MainWindow.OperationsList[index].IsMirror = false;
       };
+      Grid.SetColumn(Mirror, 7);
 
       Move = new CheckBox {
         Name = "move",
@@ -138,6 +145,7 @@ namespace robocopy_gui.UI {
         int index = Convert.ToInt32(s.Tag);
         MainWindow.OperationsList[index].IsMove = false;
       };
+      Grid.SetColumn(Move, 8);
 
       PathIcon settingsIcon = new PathIcon {
         Data = Geometry.Parse(Icons.Settings)
@@ -163,6 +171,7 @@ namespace robocopy_gui.UI {
           MainWindow.OperationsList[index].MultiThreadCount = dialog.MultiThread;
         }
       };
+      Grid.SetColumn(SettingsButton, 9);
     }
   }
 }

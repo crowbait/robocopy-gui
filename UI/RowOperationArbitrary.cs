@@ -12,7 +12,7 @@ namespace robocopy_gui.UI {
         Text = MainWindow.OperationsList[operationIndex].Command,
         Watermark = "Command",
         VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
-        Margin = new Avalonia.Thickness(10, 5, 0, 0),
+        Margin = new Avalonia.Thickness(10, 5, 10, 0),
         TextWrapping = Avalonia.Media.TextWrapping.NoWrap,
         Tag = operationIndex
       };

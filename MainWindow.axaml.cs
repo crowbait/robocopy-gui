@@ -329,23 +329,14 @@ public partial class MainWindow : Window {
       row.Mirror.Checked += OperationCheckMirror_enable;
       row.Move.Checked += OperationCheckMove_enable;
 
-      Grid.SetColumn(row.SearchSourceButton, 1);
       Grid.SetRow(row.SearchSourceButton, operationIndex);
-      Grid.SetColumn(row.SourceText, 2);
       Grid.SetRow(row.SourceText, operationIndex);
-      Grid.SetColumn(row.SearchDestButton, 3);
       Grid.SetRow(row.SearchDestButton, operationIndex);
-      Grid.SetColumn(row.DestText, 4);
       Grid.SetRow(row.DestText, operationIndex);
-      Grid.SetColumn(row.ExclFilesButton, 5);
       Grid.SetRow(row.ExclFilesButton, operationIndex);
-      Grid.SetColumn(row.ExclFoldersButton, 6);
       Grid.SetRow(row.ExclFoldersButton, operationIndex);
-      Grid.SetColumn(row.Mirror, 7);
       Grid.SetRow(row.Mirror, operationIndex);
-      Grid.SetColumn(row.Move, 8);
       Grid.SetRow(row.Move, operationIndex);
-      Grid.SetColumn(row.SettingsButton, 9);
       Grid.SetRow(row.SettingsButton, operationIndex);
 
       GridOperations.Children.Add(row.SearchSourceButton);
@@ -361,7 +352,7 @@ public partial class MainWindow : Window {
       RowOperationArbitrary row = new RowOperationArbitrary(operationIndex);
       row.Command.LostFocus += OperationTextBoxCommand_LostFocus;
       Grid.SetColumn(row.Command, 1);
-      Grid.SetColumnSpan(row.Command, 10);
+      Grid.SetColumnSpan(row.Command, 9);
       Grid.SetRow(row.Command, operationIndex);
       GridOperations.Children.Add(row.Command);
     }
