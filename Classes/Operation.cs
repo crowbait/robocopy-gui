@@ -15,7 +15,7 @@ namespace robocopy_gui.Classes {
     public bool IsOnlyIfNewer { get; set; } = false; //ignore if target file is newer
     public bool IsUseFATTime { get; set; } = false; //useful when copying between two file systems, 2s precision
     public bool IsRestartableBackup { get; set; } = false; //copies files in restartable mode. If file access is denied, switches to backup mode.
-    public bool IsOnlyFolderStructure { get; set; } = false; //copies only folder structure, without files
+    public bool IsCreate { get; set; } = false; //copies only folder structure, with zero-length files
     public bool IsLoggingFiles { get; set; } = true; //nfl doesn't list files names
     public bool IsLoggingFolders { get; set; } = true; //ndl doesn't list folder names
     public bool IsLoggingJobHeader { get; set; } = true; //njh doesn't log job header
@@ -122,6 +122,8 @@ namespace robocopy_gui.Classes {
         if (parts[i].ToLower() == "/mov") { IsMove = true; }
         if (parts[i].ToLower() == "/xo") { IsOnlyIfNewer = true; }
         if (parts[i].ToLower() == "/fft") { IsUseFATTime = true; }
+        if (parts[i].ToLower() == "/zb") { IsRestartableBackup = true; }
+        if (parts[i].ToLower() == "/create") { IsCreate = true; }
         if (parts[i].ToLower() == "/nfl") { IsLoggingFiles = false; }
         if (parts[i].ToLower() == "/ndl") { IsLoggingFolders = false; }
         if (parts[i].ToLower() == "/njh") { IsLoggingJobHeader = false; }
@@ -198,6 +200,8 @@ namespace robocopy_gui.Classes {
         if (IsMove) { command += " /mov"; }
         if (IsOnlyIfNewer) { command += " /xo"; }
         if (IsUseFATTime) { command += " /fft"; }
+        if (IsRestartableBackup) { command += " /zb"; }
+        if (IsCreate) { command += " /create"; }
         if (!IsLoggingFiles) { command += " /nfl"; }
         if (!IsLoggingFolders) { command += " /ndl"; }
         if (!IsLoggingJobHeader) { command += " /njh"; }

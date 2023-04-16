@@ -49,6 +49,10 @@
               ToolTip.Tip="Copy or move files to the destination folder only if the source file is newer than the target file." />
             <CheckBox x:Name="CheckFAT" Content="FAT-time" Grid.Column="1" Grid.Row="0"
               ToolTip.Tip="Use FAT-style time format when writing file. Useful when copying to another file system and when using &quot;only newer files&quot;." />
+            <CheckBox x:Name="CheckRestartableBackup" Content="Restartable / Backup" Grid.Column="0" Grid.Row="1"
+              ToolTip.Tip="Tries to copy files in restartable mode. If files can't be accessed, falls back to backup mode (USE WITH CAUTION)." />
+            <CheckBox x:Name="CheckCreate" Content="Only structure" Grid.Column="1" Grid.Row="1"
+              ToolTip.Tip="Creates the folder structure AND all files, but with zero length and size." />
           </Grid>
           <Grid Grid.Row="1" Margin="10,10,0,10">
             <Grid.ColumnDefinitions>

@@ -11,6 +11,8 @@ public partial class DialogRobocopySettings : Window {
   public bool IsCancel { get; set; } = false;
   public bool OnlyNewer { get; set; } = false;
   public bool FATTime { get; set; } = false;
+  public bool RestartableBackup { get; set; } = false;
+  public bool Create { get; set; } = false;
   public bool LoggingEnabled { get; set; } = true;
   public bool LogFiles { get; set; } = true;
   public bool LogFolders { get; set; } = true;
@@ -31,8 +33,13 @@ public partial class DialogRobocopySettings : Window {
     CheckOnlyNewer.IsChecked = OnlyNewer;
     FATTime = operation.IsUseFATTime;
     CheckFAT.IsChecked = FATTime;
+
     LoggingEnabled = operation.IsLoggingEnabled;
     CheckEnableLogging.IsChecked = LoggingEnabled;
+    RestartableBackup = operation.IsRestartableBackup;
+    CheckRestartableBackup.IsChecked = RestartableBackup;
+    Create = operation.IsCreate;
+    CheckCreate.IsChecked = Create;
     LogFiles = operation.IsLoggingFiles;
     CheckLogFiles.IsChecked = LogFiles;
     LogFolders = operation.IsLoggingFolders;
@@ -75,6 +82,8 @@ public partial class DialogRobocopySettings : Window {
     IsCancel = false;
     OnlyNewer = CheckOnlyNewer.IsChecked ?? false;
     FATTime = CheckFAT.IsChecked ?? false;
+    RestartableBackup = CheckRestartableBackup.IsChecked ?? false;
+    Create = CheckCreate.IsChecked ?? false;
     LoggingEnabled = CheckEnableLogging.IsChecked ?? false;
     LogFiles = CheckLogFiles.IsChecked ?? false;
     LogFolders = CheckLogFolders.IsChecked ?? false;
