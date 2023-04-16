@@ -64,12 +64,14 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
           <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
           <ColumnDefinition Width="170" />
         </Grid.ColumnDefinitions>
 
         <TextBox x:Name="InputScriptTitle" Watermark="Script Title" Margin="10,10,10,0" Grid.Column="0" TextWrapping="NoWrap" VerticalAlignment="Top" LostFocus="InputScriptTitle_LostFocus" KeyDown="InputScriptTitle_KeyDown" />
-        <CheckBox x:Name="CheckStartup" Grid.Column="1" Content="Run on Startup" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked" />
-        <Button x:Name="ButtonCommit" Content="Commit to File" VerticalAlignment="Center" Grid.Column="2" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
+        <CheckBox x:Name="CheckOperationName" Grid.Column="1" Content="Path as operation name" Margin="0,0,10,0" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckOperationName_Checked" Unchecked="CheckOperationName_Unchecked" />
+        <CheckBox x:Name="CheckStartup" Grid.Column="2" Content="Run on Startup" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked" />
+        <Button x:Name="ButtonCommit" Content="Commit to File" VerticalAlignment="Center" Grid.Column="3" Width="150" HorizontalAlignment="Right" Margin="0,0,10,0" IsEnabled="False" Click="ButtonCommit_Click" />
       </Grid>
     </Grid>
   </Panel>

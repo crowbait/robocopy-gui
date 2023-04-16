@@ -22,6 +22,7 @@ public partial class MainWindow : Window {
 #pragma warning restore CS8601
   private string currentFile = string.Empty;
   private string scriptTitle = "Backup";
+  private bool pathAsOperationName = true;
 
   public MainWindow() {
     InitializeComponent();
@@ -42,6 +43,11 @@ public partial class MainWindow : Window {
           MainWindow1.Width = Convert.ToInt32(lastWidth);
           MainWindow1.Height = Convert.ToInt32(lastHeight);
         }
+        var pathAsNameValue = Regkey.GetValue("PathAsOperationName");
+        if (pathAsNameValue is not null) {
+          pathAsOperationName = Convert.ToBoolean(pathAsNameValue);
+        }
+        CheckOperationName.IsChecked = pathAsOperationName;
       } else {
         RegistryKey? key = Registry.CurrentUser.OpenSubKey("Software\\Stormbase", RegistryKeyPermissionCheck.ReadWriteSubTree);
         if (key == null) {
@@ -163,6 +169,14 @@ public partial class MainWindow : Window {
     if (e.Key == Key.Enter) {
       InputScriptTitle_LostFocus(sender, e);
     }
+  }
+  private void CheckOperationName_Checked(object sender, RoutedEventArgs e) {
+    pathAsOperationName = true;
+    Regkey.SetValue("PathAsOperationName", true);
+  }
+  private void CheckOperationName_Unchecked(object sender, RoutedEventArgs e) {
+    pathAsOperationName = false;
+    Regkey.SetValue("PathAsOperationName", false);
   }
   private async void CheckStartup_Checked(object sender, RoutedEventArgs e) {
     if (!await new StartupTask(currentFile, scriptTitle).Register()) {
@@ -496,7 +510,11 @@ public partial class MainWindow : Window {
           file.Write("REM ");
         }
         if (!item.IsArbitrary) {
-          file.WriteLine("echo \"" + item.Name + "\"");
+          if (!pathAsOperationName) {
+            file.WriteLine("echo \"" + item.Name + "\"");
+          } else {
+            file.WriteLine("echo \"" + item.SourceFolder + " -> " + item.DestinationFolder + "\"");
+          }          
         } else {
           file.WriteLine("echo \"" + item.Command + "\"");
         }
