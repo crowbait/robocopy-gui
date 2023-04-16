@@ -40,4 +40,9 @@
   <ItemGroup>
     <Folder Include="Classes\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".github\config.yml" />
+    <None Include=".github\workflows\create-release.yml" />
+  </ItemGroup>
 </Project>
