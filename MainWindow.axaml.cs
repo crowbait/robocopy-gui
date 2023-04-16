@@ -496,7 +496,9 @@ public partial class MainWindow : Window {
           file.Write("REM ");
         }
         if (!item.IsArbitrary) {
-          file.WriteLine("echo " + item.Name);
+          file.WriteLine("echo \"" + item.Name + "\"");
+        } else {
+          file.WriteLine("echo \"" + item.Command + "\"");
         }
         file.WriteLine(item.GetCommand());
       }

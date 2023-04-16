@@ -31,21 +31,57 @@
       <ScrollViewer Grid.Row="1" Margin="10,0">
         <Grid x:Name="GridSettings">
           <Grid.RowDefinitions>
-            <RowDefinition Height="42" />
-            <RowDefinition Height="42" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="42" />
             <RowDefinition Height="42" />
           </Grid.RowDefinitions>
-          <CheckBox x:Name="CheckOnlyNewer" Content="Only newer Files" Grid.Row="0"
-            ToolTip.Tip="Copy or move files to the destination folder only if the source file is newer than the target file." />
-          <CheckBox x:Name="CheckFAT" Content="FAT-Time" Grid.Row="1"
-            ToolTip.Tip="Use FAT-style time format when writing file. Useful when copying to another file system and when using &quot;only newer files&quot;." />
+          <Grid Grid.Row="0" Margin="0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="42" />
+              <RowDefinition Height="42" />
+            </Grid.RowDefinitions>
+            <CheckBox x:Name="CheckOnlyNewer" Content="Only newer files" Grid.Column="0" Grid.Row="0" Checked="CheckOnlyNewer_Check"
+              ToolTip.Tip="Copy or move files to the destination folder only if the source file is newer than the target file." />
+            <CheckBox x:Name="CheckFAT" Content="FAT-time" Grid.Column="1" Grid.Row="0"
+              ToolTip.Tip="Use FAT-style time format when writing file. Useful when copying to another file system and when using &quot;only newer files&quot;." />
+          </Grid>
+          <Grid Grid.Row="1" Margin="10,10,0,10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="22" />
+              <RowDefinition Height="42" />
+              <RowDefinition Height="42" />
+              <RowDefinition Height="42" />
+            </Grid.RowDefinitions>
+            <CheckBox x:Name="CheckEnableLogging" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Logging &amp; Output" Margin="-9,0,0,0"
+              Checked="CheckEnableLogging_Checked" Unchecked="CheckEnableLogging_Unchecked" />
+            <CheckBox x:Name="CheckLogFiles" Content="Log files" Grid.Column="0" Grid.Row="1"
+              ToolTip.Tip="Show the names of files in the script's output." />
+            <CheckBox x:Name="CheckLogFolders" Content="Log folders" Grid.Column="1" Grid.Row="1"
+              ToolTip.Tip="Show the names of folders in the script's output." />
+            <CheckBox x:Name="CheckLogHeader" Content="Log job header" Grid.Column="0" Grid.Row="2"
+              ToolTip.Tip="Show the header of the operation in the script's output." />
+            <CheckBox x:Name="CheckLogSummary" Content="Log job summary" Grid.Column="1" Grid.Row="2"
+              ToolTip.Tip="Show the summary of the operation in the script's output." />
+            <CheckBox x:Name="CheckLogProgress" Content="Log progress" Grid.Column="0" Grid.Row="3"
+              ToolTip.Tip="Show the progress of each copy (aka percentage) during operation." />
+            <CheckBox x:Name="CheckLogSizes" Content="Log sizes" Grid.Column="1" Grid.Row="3"
+              ToolTip.Tip="Show the sizes of files in the script's output." />
+          </Grid>
           <Grid Grid.Row="2" ToolTip.Tip="Define how many times robocopy should try to copy files after it fails once. Default: 0">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Label Content="Retry Count" Grid.Column="0" Margin="0,7,0,0" />
+            <Label Content="Retry count" Grid.Column="0" Margin="0,7,0,0" />
             <NumericUpDown x:Name="NumericRetryCount" Value="0" Grid.Column="1" Width="120" Height="32" Minimum="0" Maximum="20" />
           </Grid>
           <Grid Grid.Row="3" ToolTip.Tip="Define how many files can be copied in parallel. Default: 3">

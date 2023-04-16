@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace robocopy_gui.Classes
-{
-  public class Operation
-  {
+namespace robocopy_gui.Classes {
+  public class Operation {
     public bool IsEnabled { get; set; } = true;
     public bool IsArbitrary { get; set; } = false;
     public string Command { get; set; } = string.Empty;
@@ -16,6 +14,15 @@ namespace robocopy_gui.Classes
     public bool IsMove { get; set; } = false; //true -> move files instead of copying, needs /e /xx
     public bool IsOnlyIfNewer { get; set; } = false; //ignore if target file is newer
     public bool IsUseFATTime { get; set; } = false; //useful when copying between two file systems, 2s precision
+    public bool IsRestartableBackup { get; set; } = false; //copies files in restartable mode. If file access is denied, switches to backup mode.
+    public bool IsOnlyFolderStructure { get; set; } = false; //copies only folder structure, without files
+    public bool IsLoggingFiles { get; set; } = true; //nfl doesn't list files names
+    public bool IsLoggingFolders { get; set; } = true; //ndl doesn't list folder names
+    public bool IsLoggingJobHeader { get; set; } = true; //njh doesn't log job header
+    public bool IsLoggingJobSummary { get; set; } = true; //njs doesn't log job summary
+    public bool IsLoggingProgress { get; set; } = true; //np doesn't show copying progress
+    public bool IsLoggingSize { get; set; } = true; //ns doesn't log file size
+    public bool IsLoggingEnabled { get; set; } = true; //> NUL at EOL doesn't output log at all
     public List<string> ExcludeFiles { get; set; }
     public List<string> ExcludeFolders { get; set; }
     public int MultiThreadCount { get; set; } = 3;
@@ -25,8 +32,7 @@ namespace robocopy_gui.Classes
         string source,
         string destination,
         bool mirrorFlag = true
-        )
-    {
+        ) {
       SourceFolder = source;
       DestinationFolder = destination;
       Name = CreateName(source, destination);
@@ -40,21 +46,17 @@ namespace robocopy_gui.Classes
         List<string> excludePatterns,
         bool excludeIsFolders,
         bool mirrorFlag = true
-        )
-    {
+        ) {
       SourceFolder = source;
       DestinationFolder = destination;
       Name = source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
           + " -> "
           + destination.Substring(0, 2) + " " + destination.Split("\\")[destination.Split("\\").Length - 1];
       IsMirror = mirrorFlag;
-      if (excludeIsFolders)
-      {
+      if (excludeIsFolders) {
         ExcludeFiles = new List<string>();
         ExcludeFolders = excludePatterns;
-      }
-      else
-      {
+      } else {
         ExcludeFiles = excludePatterns;
         ExcludeFolders = new List<string>();
       }
@@ -65,8 +67,7 @@ namespace robocopy_gui.Classes
         List<string> excludeFilePatterns,
         List<string> excludeFolderPatterns,
         bool mirrorFlag = true
-        )
-    {
+        ) {
       SourceFolder = source;
       DestinationFolder = destination;
       Name = source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
@@ -77,27 +78,21 @@ namespace robocopy_gui.Classes
       ExcludeFolders = excludeFolderPatterns;
     }
 
-    public Operation(string command)
-    {
+    public Operation(string command) {
       string[] parts = command.Split(" ");
       int i;
       if (parts[0].ToLower() == "rem")    //detect commented lines ("REM ...")
       {
         IsEnabled = false;
         i = 2;
-      }
-      else
-      {
+      } else {
         i = 1;
       }
       if (parts[i].EndsWith("\""))    //get source folder (including checking for spaces in path)
       {
         SourceFolder = parts[i];
-      }
-      else
-      {
-        while (!parts[i].EndsWith("\""))
-        {
+      } else {
+        while (!parts[i].EndsWith("\"")) {
           SourceFolder += parts[i] + " ";
           i++;
         }
@@ -107,11 +102,8 @@ namespace robocopy_gui.Classes
       if (parts[i].EndsWith("\""))    //get destination folder (including checking for spaces in path)
       {
         DestinationFolder = parts[i];
-      }
-      else
-      {
-        while (!parts[i].EndsWith("\""))
-        {
+      } else {
+        while (!parts[i].EndsWith("\"")) {
           DestinationFolder += parts[i] + " ";
           i++;
         }
@@ -130,19 +122,22 @@ namespace robocopy_gui.Classes
         if (parts[i].ToLower() == "/mov") { IsMove = true; }
         if (parts[i].ToLower() == "/xo") { IsOnlyIfNewer = true; }
         if (parts[i].ToLower() == "/fft") { IsUseFATTime = true; }
-        if (parts[i].ToLower().StartsWith("/mt"))
-        {
-          MultiThreadCount = int.Parse(parts[i].Split(":")[1]);
-        }
-        if (parts[i].ToLower().StartsWith("/r"))
-        {
+        if (parts[i].ToLower() == "/nfl") { IsLoggingFiles = false; }
+        if (parts[i].ToLower() == "/ndl") { IsLoggingFolders = false; }
+        if (parts[i].ToLower() == "/njh") { IsLoggingJobHeader = false; }
+        if (parts[i].ToLower() == "/njs") { IsLoggingJobSummary = false; }
+        if (parts[i].ToLower() == "/np") { IsLoggingProgress = false; }
+        if (parts[i].ToLower() == "/ns") { IsLoggingSize = false; }
+        if (parts[i].ToLower().StartsWith("/mt")) {
+            MultiThreadCount = int.Parse(parts[i].Split(":")[1]);
+          }
+        if (parts[i].ToLower().StartsWith("/r")) {
           RetryCount = int.Parse(parts[i].Split(":")[1].ToLower());
         }
         if (parts[i].ToLower() == "/xf")    //get excluded file patterns
         {
           i++;
-          while (!parts[i].StartsWith("/"))
-          {
+          while (!parts[i].StartsWith("/")) {
             ExcludeFiles.Add(parts[i]);
             i++;
             if (i > parts.Length - 1) { break; }
@@ -152,11 +147,16 @@ namespace robocopy_gui.Classes
         if (parts[i].ToLower() == "/xd")    //get excluded folder patterns
         {
           i++;
-          while (!parts[i].StartsWith("/"))
-          {
+          while (!parts[i].StartsWith("/")) {
             ExcludeFolders.Add(parts[i]);
             i++;
             if (i > parts.Length - 1) { break; }
+          }
+        }
+        if (i + 1 < parts.Length) {
+          if (parts[i] == ">" && parts[i + 1] == "NUL") {
+            IsLoggingEnabled = false;
+            break;                          //> NUL is always at EOL, so loop can stop at this point
           }
         }
         i++;
@@ -164,10 +164,8 @@ namespace robocopy_gui.Classes
       Name = CreateName();
     }
 
-    public Operation(bool isArbitraryCommand, bool isEnabled, string command)
-    {
-      if (isArbitraryCommand)
-      {
+    public Operation(bool isArbitraryCommand, bool isEnabled, string command) {
+      if (isArbitraryCommand) {
         IsArbitrary = isArbitraryCommand;
         IsEnabled = isEnabled;
         Command = command;
@@ -176,102 +174,74 @@ namespace robocopy_gui.Classes
         DestinationFolder = string.Empty;
         ExcludeFiles = new List<string>();
         ExcludeFolders = new List<string>();
-      }
-      else
-      {
+      } else {
         // check to prevent accidental generation of wrongly-typed Operation objects
         throw new ArgumentException("Arbitrary commands must be called with isArbitraryCommand = true");
       }
     }
 
-    public string GetCommand()
-    {
-      if (!IsArbitrary)
-      {
+    public string GetCommand() {
+      if (!IsArbitrary) {
         string command = "";
-        if (IsEnabled)
-        {
+        if (IsEnabled) {
           command += "robocopy";
-        }
-        else
-        {
+        } else {
           command += "REM robocopy";
         }
         command += " \"" + SourceFolder + "\"";
         command += " \"" + DestinationFolder + "\"";
-        if (IsMirror && !IsMove)
-        {
+        if (IsMirror && !IsMove) {
           command += " /mir";
-        }
-        else
-        {
+        } else {
           command += " /e /xx";
         }
-        if (IsMove)
-        {
-          command += " /mov";
-        }
-        if (IsOnlyIfNewer)
-        {
-          command += " /xo";
-        }
-        if (IsUseFATTime)
-        {
-          command += " /fft";
-        }
+        if (IsMove) { command += " /mov"; }
+        if (IsOnlyIfNewer) { command += " /xo"; }
+        if (IsUseFATTime) { command += " /fft"; }
+        if (!IsLoggingFiles) { command += " /nfl"; }
+        if (!IsLoggingFolders) { command += " /ndl"; }
+        if (!IsLoggingJobHeader) { command += " /njh"; }
+        if (!IsLoggingJobSummary) { command += " /njs"; }
+        if (!IsLoggingProgress) { command += " /np"; }
+        if (!IsLoggingSize) { command += " /ns"; }
         command += " /mt:" + MultiThreadCount + " /R:" + RetryCount;
-        if (ExcludeFiles.Count > 0)
-        {
+        if (ExcludeFiles.Count > 0) {
           command += " /xf";
-          foreach (string item in ExcludeFiles)
-          {
+          foreach (string item in ExcludeFiles) {
             command += " " + item;
           }
         }
-        if (ExcludeFolders.Count > 0)
-        {
+        if (ExcludeFolders.Count > 0) {
           command += " /xd";
-          foreach (string item in ExcludeFolders)
-          {
+          foreach (string item in ExcludeFolders) {
             command += " " + item;
           }
         }
+        if (!IsLoggingEnabled) { command += " > NUL"; }
         return command;
-      }
-      else // is arbitrary command
-      {
-        if (IsEnabled)
+      } else // is arbitrary command
         {
+        if (IsEnabled) {
           return Command;
-        }
-        else
-        {
+        } else {
           return "REM " + Command;
         }
       }
     }
 
-    public string CreateName()
-    {
-      if (string.IsNullOrWhiteSpace(SourceFolder) || string.IsNullOrWhiteSpace(DestinationFolder))
-      {
+    public string CreateName() {
+      if (string.IsNullOrWhiteSpace(SourceFolder) || string.IsNullOrWhiteSpace(DestinationFolder)) {
         return string.Empty;
-      }
-      else
-      {
+      } else {
         return SourceFolder.Substring(0, 2) + " " + SourceFolder.Split("\\")[SourceFolder.Split("\\").Length - 1]
         + " -> "
         + DestinationFolder.Substring(0, 2) + " " + DestinationFolder.Split("\\")[DestinationFolder.Split("\\").Length - 1];
       }
     }
-    public static string CreateName(string source, string destination)
-    {
-      if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(destination))
-      {
+    public static string CreateName(string source, string destination) {
+      if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(destination)) {
         return string.Empty;
-      }
-      else
-      {
+      } else {
         return source.Substring(0, 2) + " " + source.Split("\\")[source.Split("\\").Length - 1]
         + " -> "
         + destination.Substring(0, 2) + " " + destination.Split("\\")[destination.Split("\\").Length - 1];

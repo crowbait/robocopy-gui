@@ -106,7 +106,7 @@ namespace robocopy_gui.UI {
         }
         if (!dialog.IsCancel) {
           MainWindow.OperationsList[index].ExcludeFolders = dialog.ReturnExclusions;
-          sender.Content = "Exclude\nFiles: " + dialog.ReturnExclusions.Count;
+          sender.Content = "Exclude\nFolders: " + dialog.ReturnExclusions.Count;
         }
       };
       Grid.SetColumn(ExclFoldersButton, 6);
@@ -167,6 +167,13 @@ namespace robocopy_gui.UI {
         if (!dialog.IsCancel) {
           MainWindow.OperationsList[index].IsOnlyIfNewer = dialog.OnlyNewer;
           MainWindow.OperationsList[index].IsUseFATTime = dialog.FATTime;
+          MainWindow.OperationsList[index].IsLoggingEnabled = dialog.LoggingEnabled;
+          MainWindow.OperationsList[index].IsLoggingFiles = dialog.LogFiles;
+          MainWindow.OperationsList[index].IsLoggingFolders = dialog.LogFolders;
+          MainWindow.OperationsList[index].IsLoggingJobHeader = dialog.LogHeader;
+          MainWindow.OperationsList[index].IsLoggingJobSummary = dialog.LogSummary;
+          MainWindow.OperationsList[index].IsLoggingProgress = dialog.LogProgress;
+          MainWindow.OperationsList[index].IsLoggingSize = dialog.LogSizes;
           MainWindow.OperationsList[index].RetryCount = dialog.RetryCount;
           MainWindow.OperationsList[index].MultiThreadCount = dialog.MultiThread;
         }

@@ -47,12 +47,9 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 
 ## To-do
 
-- move grid column assignments to row classes
-- new setting
+- new settings
   - /zb [(Restartable/Backup Mode)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)
   - /create (creates only folder structure)
-  - [logging options](https://stackoverflow.com/questions/3898127/how-can-i-make-robocopy-silent-in-the-command-line-except-for-progress)
-  - turn off logging alltogether (see above, pipe `> NUL`
 - dialog for default settings of new operations, save to registry
 
 #### Delayed indefinitely
