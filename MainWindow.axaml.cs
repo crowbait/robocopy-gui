@@ -274,7 +274,6 @@ public partial class MainWindow : Window {
 
 
   private void ReadFile() {
-    Regkey.SetValue("lastFile", currentFile);
     ClearOperationsList();
 
     //read lines in file
@@ -414,6 +413,7 @@ public partial class MainWindow : Window {
     GridOperations.Children.Add(remove);
   }
   public void RenderList() {
+    Regkey.SetValue("lastFile", currentFile);
     int operationIndex = 0;
     foreach (Operation operation in OperationsList) {
       AddOperationRow(operation, operationIndex);
