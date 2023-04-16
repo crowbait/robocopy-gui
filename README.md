@@ -48,6 +48,7 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 
 ## To-do
 
+- checkbox for operation name "foldername -> foldername" or "path -> path"
 - dialog for default settings of new operations, save to registry
 
 #### Delayed indefinitely

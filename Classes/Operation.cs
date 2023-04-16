@@ -19,7 +19,7 @@ namespace robocopy_gui.Classes {
     public bool IsLoggingFiles { get; set; } = true; //nfl doesn't list files names
     public bool IsLoggingFolders { get; set; } = true; //ndl doesn't list folder names
     public bool IsLoggingJobHeader { get; set; } = true; //njh doesn't log job header
-    public bool IsLoggingJobSummary { get; set; } = true; //njs doesn't log job summary
+    public bool IsLoggingJobSummary { get; set; } = false; //njs doesn't log job summary
     public bool IsLoggingProgress { get; set; } = true; //np doesn't show copying progress
     public bool IsLoggingSize { get; set; } = true; //ns doesn't log file size
     public bool IsLoggingEnabled { get; set; } = true; //> NUL at EOL doesn't output log at all
@@ -79,6 +79,9 @@ namespace robocopy_gui.Classes {
     }
 
     public Operation(string command) {
+      //init for variables that are reversely tested (aka are false by default and can only be tested for false)
+      IsLoggingJobSummary = true;
+
       string[] parts = command.Split(" ");
       int i;
       if (parts[0].ToLower() == "rem")    //detect commented lines ("REM ...")
@@ -139,7 +142,7 @@ namespace robocopy_gui.Classes {
         if (parts[i].ToLower() == "/xf")    //get excluded file patterns
         {
           i++;
-          while (!parts[i].StartsWith("/")) {
+          while (!parts[i].StartsWith("/") && !parts[i].StartsWith(">")) {
             ExcludeFiles.Add(parts[i]);
             i++;
             if (i > parts.Length - 1) { break; }
@@ -149,7 +152,7 @@ namespace robocopy_gui.Classes {
         if (parts[i].ToLower() == "/xd")    //get excluded folder patterns
         {
           i++;
-          while (!parts[i].StartsWith("/")) {
+          while (!parts[i].StartsWith("/") && !parts[i].StartsWith(">")) {
             ExcludeFolders.Add(parts[i]);
             i++;
             if (i > parts.Length - 1) { break; }

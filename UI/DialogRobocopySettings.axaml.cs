@@ -33,13 +33,14 @@ public partial class DialogRobocopySettings : Window {
     CheckOnlyNewer.IsChecked = OnlyNewer;
     FATTime = operation.IsUseFATTime;
     CheckFAT.IsChecked = FATTime;
-
-    LoggingEnabled = operation.IsLoggingEnabled;
-    CheckEnableLogging.IsChecked = LoggingEnabled;
     RestartableBackup = operation.IsRestartableBackup;
     CheckRestartableBackup.IsChecked = RestartableBackup;
     Create = operation.IsCreate;
     CheckCreate.IsChecked = Create;
+
+    LoggingEnabled = operation.IsLoggingEnabled;
+    CheckEnableLogging.IsChecked = LoggingEnabled;
+    SwitchLoggingState(LoggingEnabled);
     LogFiles = operation.IsLoggingFiles;
     CheckLogFiles.IsChecked = LogFiles;
     LogFolders = operation.IsLoggingFolders;
@@ -58,21 +59,19 @@ public partial class DialogRobocopySettings : Window {
     NumericMultiThread.Value = MultiThread;
   }
 
+  private void SwitchLoggingState(bool newState) {
+    CheckLogFiles.IsEnabled = newState;
+    CheckLogFolders.IsEnabled = newState;
+    CheckLogHeader.IsEnabled = newState;
+    CheckLogSummary.IsEnabled = newState;
+    CheckLogProgress.IsEnabled = newState;
+    CheckLogSizes.IsEnabled = newState;
+  }
   private void CheckEnableLogging_Checked(object? sender, RoutedEventArgs e) {
-    CheckLogFiles.IsEnabled = true;
-    CheckLogFolders.IsEnabled = true;
-    CheckLogHeader.IsEnabled = true;
-    CheckLogSummary.IsEnabled = true;
-    CheckLogProgress.IsEnabled = true;
-    CheckLogSizes.IsEnabled = true;
+    SwitchLoggingState(true);
   }
   private void CheckEnableLogging_Unchecked(object? sender, RoutedEventArgs e) {
-    CheckLogFiles.IsEnabled = false;
-    CheckLogFolders.IsEnabled = false;
-    CheckLogHeader.IsEnabled = false;
-    CheckLogSummary.IsEnabled = false;
-    CheckLogProgress.IsEnabled = false;
-    CheckLogSizes.IsEnabled = false;
+    SwitchLoggingState(false);
   }
   private void CheckOnlyNewer_Check(object? sender, RoutedEventArgs e) {
     CheckFAT.IsChecked = true;
