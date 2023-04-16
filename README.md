@@ -7,8 +7,9 @@
 #### Windows GUI for managing robocopy-based .bat-scripts for backup purposes 
 
 <div align="center">
-  <img src="Assets/main-interface.png" width="75%" stlye="padding: 8px; float: left;" />
-  <img src="Assets/exclusions.png" width="20%" stlye="padding: 8px; float: right;" />
+  <img src="Assets/main-interface.png" width="95%" stlye="padding: 8px; float: left;" />
+  <img src="Assets/exclusions.png" width="35%" stlye="padding: 8px; float: right;" />
+  <img src="Assets/settings.png" width="35%" stlye="padding: 8px; float: right;" />
 </div>
 
 ## Features
@@ -47,9 +48,6 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 
 ## To-do
 
-- new settings
-  - /zb [(Restartable/Backup Mode)](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)
-  - /create (creates only folder structure)
 - dialog for default settings of new operations, save to registry
 
 #### Delayed indefinitely
