@@ -73,6 +73,7 @@ namespace robocopy_gui.UI {
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
         Width = 100,
+        Margin = new Thickness(10,0,5,0),
         Tag = operationIndex
       };
       ExclFilesButton.Click += async (s, e) => {
@@ -95,6 +96,7 @@ namespace robocopy_gui.UI {
         HorizontalAlignment = HorizontalAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center,
         Width = 100,
+        Margin = new Thickness(5, 0, 10, 0),
         Tag = operationIndex
       };
       ExclFoldersButton.Click += async (s, e) => {

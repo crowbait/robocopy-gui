@@ -51,12 +51,12 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="110" />
+            <ColumnDefinition Width="110" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="70" />
+            <ColumnDefinition Width="70" />
           </Grid.ColumnDefinitions>
         </Grid>
       </ScrollViewer>
