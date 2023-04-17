@@ -21,10 +21,9 @@ jobs:
           exclude_types: other,docs,ci,refactor,style,test,chore
 
       - name: Create release
-        permissions: write-all
         uses: actions/create-release@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.release_token }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
