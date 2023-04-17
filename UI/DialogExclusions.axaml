@@ -9,7 +9,7 @@
         Background="Transparent"
         ExtendClientAreaToDecorationsHint="True"
         SystemDecorations="BorderOnly" ExtendClientAreaChromeHints="NoChrome" CanResize="False"
-        Title="Exclusions" Width="400" Height="500" Topmost="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+        Title="Exclusions" Width="400" Height="500" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
   <Panel>
     <ExperimentalAcrylicBorder IsHitTestVisible="False">
       <ExperimentalAcrylicBorder.Material>
