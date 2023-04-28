@@ -49,6 +49,8 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 ## To-do
 
 - dialog for default settings of new operations, save to registry
+- option for rotating backups (eg. Monday - Sunday, restart)
+  - variable length of rotation?
 
 #### Delayed indefinitely
 These items seem either impossible or at least unfeasible. Further research might be required and ideas on tackling these problems have not been successful so far.
