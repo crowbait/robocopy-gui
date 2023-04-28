@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyVersion>2.2.0</AssemblyVersion>
-    <FileVersion>2.2.0</FileVersion>
+    <AssemblyVersion>2.2.1</AssemblyVersion>
+    <FileVersion>2.2.1</FileVersion>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
     <Nullable>enable</Nullable>

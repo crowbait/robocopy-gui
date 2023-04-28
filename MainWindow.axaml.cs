@@ -298,13 +298,9 @@ public partial class MainWindow : Window {
     //read lines in file
     List<string> operationStrings = new List<string>();
     using (StreamReader reader = File.OpenText(currentFile)) {
-      int skipFirstLines = 1; // 0 to disable - 1 is designed to skip "echo off" at the beginning of file
-      for (int i = 0; i < skipFirstLines; i++) {
-        reader.ReadLine();
-      }
       while (!reader.EndOfStream) {
         var readLine = reader.ReadLine();
-        if (readLine != null && !string.IsNullOrWhiteSpace(readLine)) {
+        if (readLine != null && !string.IsNullOrWhiteSpace(readLine) && readLine != "echo off") {
           operationStrings.Add(readLine);
         }
       }
