@@ -18,7 +18,7 @@ namespace robocopy_gui.Classes {
     public bool IsCreate { get; set; } = false; //copies only folder structure, with zero-length files
     public bool IsLoggingFiles { get; set; } = true; //nfl doesn't list files names
     public bool IsLoggingFolders { get; set; } = true; //ndl doesn't list folder names
-    public bool IsLoggingJobHeader { get; set; } = true; //njh doesn't log job header
+    public bool IsLoggingJobHeader { get; set; } = false; //njh doesn't log job header
     public bool IsLoggingJobSummary { get; set; } = false; //njs doesn't log job summary
     public bool IsLoggingProgress { get; set; } = true; //np doesn't show copying progress
     public bool IsLoggingSize { get; set; } = true; //ns doesn't log file size
