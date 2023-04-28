@@ -66,6 +66,7 @@ public partial class MainWindow : Window {
           InputFilePath.Text = lastFile;
           currentFile = lastFile;
           ButtonCommit.IsEnabled = true;
+          ButtonRun.IsEnabled = true;
           ReadFile();
         }
       }
@@ -103,6 +104,7 @@ public partial class MainWindow : Window {
         RenderList();
       }
       ButtonCommit.IsEnabled = true;
+      ButtonRun.IsEnabled = true;
     }
   }
   private async void ButtonReloadFile_Click(object sender, RoutedEventArgs e) {
@@ -121,6 +123,7 @@ public partial class MainWindow : Window {
         ClearOperationsList();
         RenderList();
         ButtonCommit.IsEnabled = true;
+        ButtonRun.IsEnabled = true;
       } else {
         InputFilePath.Text = currentFile;
       }
@@ -135,6 +138,7 @@ public partial class MainWindow : Window {
         currentFile = fileName;
         ReadFile();
         ButtonCommit.IsEnabled = true;
+        ButtonRun.IsEnabled = true;
       } else {
         DialogMessage message = new DialogMessage(
           "The file / path you've entered does not exist.\nDo you want to create it?",
@@ -149,6 +153,7 @@ public partial class MainWindow : Window {
           ClearOperationsList();
           RenderList();
           ButtonCommit.IsEnabled = true;
+          ButtonRun.IsEnabled = true;
         } else {
           InputFilePath.Text = currentFile;
         }
@@ -490,7 +495,7 @@ public partial class MainWindow : Window {
     GridOperations.Children.Add(addArbitrary);
   }
 
-  private void ButtonCommit_Click(object sender, RoutedEventArgs e) {
+  private void ButtonCommit_Click(object? sender, RoutedEventArgs e) {
     // MessageBox.Show("Inspect!");  // set breakpoint here for convenient variable inspection
 
     StreamWriter file;
@@ -522,6 +527,11 @@ public partial class MainWindow : Window {
       }
     }
     file.Close();
+  }
+
+  private void ButtonRun_Click(object? sender, RoutedEventArgs e) {
+    ButtonCommit_Click(sender, e);
+    System.Diagnostics.Process.Start(currentFile);
   }
 
   private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {

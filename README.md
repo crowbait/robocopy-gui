@@ -48,8 +48,6 @@ Important: the program is targeting Windows 10.0.18362 and *might or might not* 
 
 ## To-do
 
-- re-check default operation settings
-- button to run script now
 - dialog for default settings of new operations, save to registry
 
 #### Delayed indefinitely
