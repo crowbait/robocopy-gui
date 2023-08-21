@@ -13,6 +13,7 @@ public partial class DialogRobocopySettings : Window {
   public bool FATTime { get; set; } = false;
   public bool RestartableBackup { get; set; } = false;
   public bool Create { get; set; } = false;
+  public bool FollowSymLinks { get; set; } = true;
   public bool LoggingEnabled { get; set; } = true;
   public bool LogFiles { get; set; } = true;
   public bool LogFolders { get; set; } = true;
@@ -37,6 +38,8 @@ public partial class DialogRobocopySettings : Window {
     CheckRestartableBackup.IsChecked = RestartableBackup;
     Create = operation.IsCreate;
     CheckCreate.IsChecked = Create;
+    FollowSymLinks = operation.IsFollowSymLinks;
+    CheckSymLinks.IsChecked = FollowSymLinks;
 
     LoggingEnabled = operation.IsLoggingEnabled;
     CheckEnableLogging.IsChecked = LoggingEnabled;
@@ -83,6 +86,8 @@ public partial class DialogRobocopySettings : Window {
     FATTime = CheckFAT.IsChecked ?? false;
     RestartableBackup = CheckRestartableBackup.IsChecked ?? false;
     Create = CheckCreate.IsChecked ?? false;
+    FollowSymLinks = CheckSymLinks.IsChecked ?? false;
+
     LoggingEnabled = CheckEnableLogging.IsChecked ?? false;
     LogFiles = CheckLogFiles.IsChecked ?? false;
     LogFolders = CheckLogFolders.IsChecked ?? false;

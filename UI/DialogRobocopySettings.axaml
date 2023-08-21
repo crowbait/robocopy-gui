@@ -44,6 +44,7 @@
             <Grid.RowDefinitions>
               <RowDefinition Height="42" />
               <RowDefinition Height="42" />
+              <RowDefinition Height="42" />
             </Grid.RowDefinitions>
             <CheckBox x:Name="CheckOnlyNewer" Content="Only newer files" Grid.Column="0" Grid.Row="0" Checked="CheckOnlyNewer_Check"
               ToolTip.Tip="Copy or move files to the destination folder only if the source file is newer than the target file." />
@@ -53,6 +54,8 @@
               ToolTip.Tip="Tries to copy files in restartable mode. If files can't be accessed, falls back to backup mode (USE WITH CAUTION)." />
             <CheckBox x:Name="CheckCreate" Content="Only structure" Grid.Column="1" Grid.Row="1"
               ToolTip.Tip="Creates the folder structure AND all files, but with zero length and size." />
+            <CheckBox x:Name="CheckSymLinks" Content="Follow SymLinks" Grid.Column="0" Grid.Row="2"
+              ToolTip.Tip="When on, follows symbolic links and copies the file. If off, copies the symbolic link itself." />
           </Grid>
           <Grid Grid.Row="1" Margin="10,10,0,10">
             <Grid.ColumnDefinitions>

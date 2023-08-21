@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyVersion>2.2.1</AssemblyVersion>
-    <FileVersion>2.2.1</FileVersion>
+    <AssemblyVersion>2.3.0</AssemblyVersion>
+    <FileVersion>2.3.0</FileVersion>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -18,7 +18,7 @@
   <ItemGroup>
     <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="Assets\icon.ico" />
   </ItemGroup>

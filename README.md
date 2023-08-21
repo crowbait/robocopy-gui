@@ -61,3 +61,4 @@ These items seem either impossible or at least unfeasible. Further research migh
 
 - development using Visual Studio 2022 is recommended
 - installation of [AvaloniaUI extension](https://avaloniaui.net/GettingStarted#installation) is recommended
+- Solution is set up to produce self-contained `.exe` in folder `publish`, using Visual Studio's publishing function

@@ -171,6 +171,7 @@ namespace robocopy_gui.UI {
           MainWindow.OperationsList[index].IsUseFATTime = dialog.FATTime;
           MainWindow.OperationsList[index].IsRestartableBackup = dialog.RestartableBackup;
           MainWindow.OperationsList[index].IsCreate = dialog.Create;
+          MainWindow.OperationsList[index].IsFollowSymLinks = dialog.FollowSymLinks;
           MainWindow.OperationsList[index].IsLoggingEnabled = dialog.LoggingEnabled;
           MainWindow.OperationsList[index].IsLoggingFiles = dialog.LogFiles;
           MainWindow.OperationsList[index].IsLoggingFolders = dialog.LogFolders;
