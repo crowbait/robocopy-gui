@@ -1,3 +1,8 @@
+> [!WARNING]
+> This project is no longer maintained.
+> 
+> The program still works at the time of writing and there is no reason to expect that changing soon, but there won't be any more updates because I'm no longer using Windows and therefore not using this program anymore.
+
 <div align="center">
   <img src="Assets/icon.svg" width="256" />
 </div>
